@@ -78,6 +78,8 @@ function byInitiative(creature1, creature2) {
     var initiative1 = creature1['inikka'];
     var initiative2 = creature2['inikka'];
 
+    console.assert(!isNaN(initiative1) && !isNaN(initiative2));
+
     return 1 * (initiative2 - initiative1);
 }
 
