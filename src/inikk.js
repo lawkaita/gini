@@ -1,16 +1,20 @@
-var database = [
-    {name: 'uthal', inikka: 5},
-    {name: 'kobold123', inikka: 36, hp: 77}
-]
+var database = [];
+
+var nextMonsterId = 0;
 
 function addMonster(name, initiative, hp) {
-    var monster = {name: name, inikka: initiative, hp: hp};
+    var monster = {id: nextMonsterId, name: name, inikka: initiative, hp: hp};
     database.push(monster);
+    nextMonsterId++;
 }
 
 function init() {
     console.log(11345);
+
     addMonster('Aboleth', 12, 100);
+    addMonster('uthal', 5, 0);
+    addMonster('kobold123', 36, 77);
+
     var foo = document.getElementById('main');
     var text = createUi(database);
     foo.appendChild(text);
