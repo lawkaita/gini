@@ -31,7 +31,8 @@ function addClicked() {
     var name = nameElement.value;
     addMonster(name, 0, 0);
 
-    console.log('pekka' + name);
+    updateUi();
+    console.log('pekka ' + name);
 }
 
 function createAddUi() {
@@ -67,6 +68,15 @@ function createUi(creatures) {
     table.appendChild(addUi);
     return table;    
 }
+
+function updateUi() {
+    var newTable = createUi(database);
+    var oldTable = document.getElementById('ui');
+    var container = oldTable.parentElement;
+    container.replaceChild(newTable, oldTable);    
+}
+
+
 
 window.addEventListener('load', init);
 
