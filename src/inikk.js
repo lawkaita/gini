@@ -20,6 +20,32 @@ function init() {
     foo.appendChild(text);
 }
 
+function getCreatureIndex(creatureId) {
+    for(var i in database) {
+        var creature = database[i];
+        var currentId = creature['id'];
+
+        if (currentId == creatureId) {
+            return i;
+        }
+    }
+
+    return null;        
+}
+
+function getDeleteClicked(creatureId) {
+    var deleteClicked = function() {
+        var index = getCreatureIndex(creatureId);
+
+        console.assert(index != null);
+
+        database.splice(index, 1);
+        updateUi();
+    };
+
+    return deleteClicked;
+}
+
 function createRow(creature) {    
     var name = creature['name'];
     var nameText = document.createTextNode(name);
@@ -31,9 +57,19 @@ function createRow(creature) {
     var initiativeCell = document.createElement('td');
     initiativeCell.appendChild(initiativeText);
 
+    var button = document.createElement('input');
+    button.setAttribute('type', 'button');
+    button.setAttribute('value', 'remove')
+    var creatureId = creature['id'];
+    var deleteClicked = getDeleteClicked(creatureId);
+    button.addEventListener('click', deleteClicked);
+    var buttonCell = document.createElement('td');
+    buttonCell.appendChild(button);    
+
     var row = document.createElement('tr');
     row.appendChild(nameCell);
     row.appendChild(initiativeCell);
+    row.appendChild(buttonCell);
     return row;
 }
 
@@ -65,8 +101,8 @@ function createAddUi() {
 
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
+    button.setAttribute('value', 'add');
     button.addEventListener('click', addClicked);
-
     var buttonCell = document.createElement('td');
     buttonCell.appendChild(button);
     
