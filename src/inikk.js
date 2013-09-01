@@ -19,10 +19,17 @@ function init() {
 function createRow(creature) {    
     var name = creature['name'];
     var nameText = document.createTextNode(name);
-    var cell = document.createElement('td');
-    cell.appendChild(nameText);
+    var nameCell = document.createElement('td');
+    nameCell.appendChild(nameText);
+
+    var initiative = creature['inikka'];
+    var initiativeText = document.createTextNode(initiative);
+    var initiativeCell = document.createElement('td');
+    initiativeCell.appendChild(initiativeText);
+
     var row = document.createElement('tr');
-    row.appendChild(cell);
+    row.appendChild(nameCell);
+    row.appendChild(initiativeCell);
     return row;
 }
 
