@@ -36,7 +36,11 @@ function createRow(creature) {
 function addClicked() {
     var nameElement = document.getElementById('name');
     var name = nameElement.value;
-    addMonster(name, 0, 0);
+    
+    var initiativeElement = document.getElementById('initiative');
+    var initiative = initiativeElement.value;
+
+    addMonster(name, initiative, 0);
 
     updateUi();
     console.log('pekka ' + name);
@@ -49,6 +53,12 @@ function createAddUi() {
     var nameCell = document.createElement('td');
     nameCell.appendChild(nameInput);
 
+    var initiativeInput = document.createElement('input');
+    initiativeInput.setAttribute('type', 'text');
+    initiativeInput.setAttribute('id', 'initiative');
+    var initiativeCell = document.createElement('td');
+    initiativeCell.appendChild(initiativeInput);
+
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
     button.addEventListener('click', addClicked);
@@ -58,6 +68,7 @@ function createAddUi() {
     
     var row = document.createElement('tr');
     row.appendChild(nameCell);
+    row.appendChild(initiativeCell);
     row.appendChild(buttonCell);
 
     return row;
