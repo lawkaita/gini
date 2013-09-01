@@ -63,11 +63,26 @@ function createAddUi() {
     return row;
 }
 
+function byInitiative(creature1, creature2) {
+    var initiative1 = creature1['inikka'];
+    var initiative2 = creature2['inikka'];
+
+    return 1 * (initiative2 - initiative1);
+}
+
+function sortByInitiative(creatures) {
+    var newList = creatures.slice();
+    newList.sort(byInitiative);
+
+    return newList;
+}
+
 function createUi(creatures) {
+    var sortedCreatures = sortByInitiative(creatures);
     var table = document.createElement('table');
     table.setAttribute('id', 'ui');
-    for(var i in creatures) {
-        var creature = creatures[i];
+    for(var i in sortedCreatures) {
+        var creature = sortedCreatures[i];
         var testRow = createRow(creature);
         table.appendChild(testRow);
     }
