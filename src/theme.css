@@ -11,6 +11,18 @@ h1 {
   margin: 0 0 0 0;
 }
 
+#ui {
+  width: 100%;
+}
+
+#name {
+  width: 100%;
+}
+
+#initiative {
+  width: 100%;
+}
+
 .mainInput {
   background-color: gray;
   color: white;
@@ -24,7 +36,7 @@ h1 {
 }
 
 .textWindow {
-  background-color: gray;
+  background-color: black;
   color: white;
   font-family: 'Consolas' sans-serif;
   font-size: 12px;
