@@ -1,4 +1,31 @@
-body
-{
-	background-color: #EDB;
+body {
+  background-color: gray;
+  font-family: 'Consolas', sans-serif;
+  font-size: 8px;
+  color: white;
+  margin: 15px;
+  max-size: 500px;
+}
+
+h1 {
+  margin: 0 0 0 0;
+}
+
+.mainInput {
+  background-color: gray;
+  color: white;
+  font-family: 'Consolas' sans-serif;
+  font-size: 12px;
+  border-color: black;
+}
+
+*:focus {
+    outline: none;
+}
+
+.textWindow {
+  background-color: gray;
+  color: white;
+  font-family: 'Consolas' sans-serif;
+  font-size: 12px;
 }
