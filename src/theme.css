@@ -1,10 +1,17 @@
+html {
+  background-color: #85BBFF;
+}
+
 body {
   background-color: gray;
   font-family: 'Consolas', sans-serif;
   font-size: 8px;
   color: white;
-  margin: 15px;
-  max-size: 500px;
+  
+  padding: 10px;
+  
+  width: 400px;
+  margin: 0 auto;
 }
 
 h1 {
@@ -12,6 +19,7 @@ h1 {
 }
 
 #ui {
+  background-color: #595959;
   width: 100%;
 }
 
@@ -24,20 +32,47 @@ h1 {
 }
 
 .mainInput {
-  background-color: gray;
+  background-color: #FF8800;
   color: white;
   font-family: 'Consolas' sans-serif;
   font-size: 12px;
   border-color: black;
+  
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+
+*::-webkit-input-placeholder {
+    color: red;
+}
+*:-moz-placeholder {
+    /* FF 4-18 */
+    color: red;
+}
+*::-moz-placeholder {
+    /* FF 19+ */
+    color: red;
+}
+*:-ms-input-placeholder {
+    /* IE 10+ */
+    color: red;
 }
 
 *:focus {
     outline: none;
 }
 
-.textWindow {
-  background-color: black;
+.textRows {
+  background-color: blue;
   color: white;
   font-family: 'Consolas' sans-serif;
   font-size: 12px;
+}
+
+#textWindow {
+  background-color: black;
+  max-height: 300px;
+  overflow: auto;
 }

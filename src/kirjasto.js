@@ -15,7 +15,7 @@ function initWindow() {
     addMonster('uthal', 5, 0);
     addMonster('kobold123', 36, 77);
 
-    var foo = document.querySelector("#mainWindow");
+    var foo = document.querySelector("#creaturesWindow");
     var text = createUi(database);
     foo.appendChild(text);
 }
