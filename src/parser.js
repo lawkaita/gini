@@ -4,22 +4,28 @@ function addCreatureCommand(params) {
   ;
 }
 
-function removeCreature() {
+function removeCreatureCommand() {
   
 }
 
-var changeInitiative;
-var dealDamage;
-var clearEncounter;
-var printHelp;
-var commentCreature;
-var uncommentCreature;
+var changeInitiativeCommand;
+var dealDamageCommand;
+var clearEncounterCommand;
+var printHelpCommand;
+var commentCreatureCommand;
+var uncommentCreatureCommand;
 
-function sum(params) {
-  
+function returnAsNumber(param) {
+  return parseInt(param);
 }
 
-function throwDice(params) {
+function sumCommand(params) {
+  var summands = params.map(runParsed);
+  
+  return calc.sum(summands);
+}
+
+function throwDiceCommand(params) {
   var times = params[0];
   var diceSize = params[1];
   
@@ -28,18 +34,21 @@ function throwDice(params) {
 
 var verbs = {
   "add": addCreatureCommand, 
-  "remove": removeCreature, 
-  "init":changeInitiative, 
-  "dmg": dealDamage,
-  "clear": clearEncounter, 
-  "print": printHelp, 
-  "comment": commentCreature, 
-  "uncomment": uncommentCreature,
-  "sum": sum,
-  "dice": throwDice
+  "remove": removeCreatureCommand, 
+  "init":changeInitiativeCommand, 
+  "dmg": dealDamageCommand,
+  "clear": clearEncounterCommand, 
+  "print": printHelpCommand, 
+  "comment": commentCreatureCommand, 
+  "uncomment": uncommentCreatureCommand,
+  "sum": sumCommand,
+  "dice": throwDiceCommand,
+  "number": returnAsNumber
 };
 
 function parse(command) {
+  var parsed;
+  
   /*
   var parsed = {
     command: parts[0],
@@ -126,7 +135,11 @@ function isDice(string) {
 }
 
 function isNumberString(string) {
-  return !isNaN(string) && (typeof(string) === "string");
+  return !isNaN(string) && (typeof(string) === "string") && !isBlank(string);
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }
 
 function isNumber(object) {
@@ -164,9 +177,9 @@ function parseSum(command) {
 }
 
 function parseSummands(summands) {
-  var parsedSummands;
+  var parsedSummands = [];
   
-  for (i = 0; i < summands.lengt; i++) {
+  for (i = 0; i < summands.length; i++) {
     var summand = summands[i];
     
     if (isNumberString(summand)) {
@@ -178,11 +191,15 @@ function parseSummands(summands) {
     }
   }
   
-  return summands;
+  return parsedSummands;
 }
 
 function parseDice(command) {
   var parts = command.split("d");
+  
+  if (parts[0] === "") {
+    parts[0] = "1";
+  }
   
   var parsed = {
     command: "dice",
@@ -232,6 +249,14 @@ function objectContainsKey(object, key) {
 
 function run(command) {
   var parsed = parse(command);
+  var commandName = parsed['command'];
+  var command = verbs[commandName];
+  var params = parsed['params'];
+  
+  return command(params);
+}
+
+function runParsed(parsed) {
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];
