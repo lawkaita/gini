@@ -63,6 +63,10 @@ function throwDiceCommand(params) {
   return calc.throwDice(times, diceSize);
 }
 
+function ansCommand() {
+  return calc.getAns();
+}
+
 var verbs = {
   "add": addCreatureCommand, 
   "remove": removeCreatureCommand, 
@@ -76,7 +80,8 @@ var verbs = {
   //math
   "sum": sumCommand,
   "dice": throwDiceCommand,
-  "number": returnAsNumber
+  "number": returnAsNumber,
+  "ans": ansCommand
 };
 
 function parse(command) {
@@ -403,13 +408,13 @@ function objectContainsKey(object, key) {
   return !(typeof(object[key]) === typeof(undefined));
 }
 
-function runCommandString(command) {
-  var parsed = parse(command);
+function runCommandString(userInput) {
+  var parsed = parse(userInput);
   var commandName = parsed['command'];
-  var command = verbs[commandName];
+  var commandToRun = verbs[commandName];
   var params = parsed['params'];
   
-  return command(params);
+  return commandToRun(params);
 }
 
 function runParsed(parsed) {

@@ -1,13 +1,13 @@
 function Calculator() {
   this.ans = 0;
-  
-  this.setAndGiveAns = function(result) {
-    this.ans = result;
-    return result;
-  }
 }
 
-Calculator.prototype.getAns = function(){
+Calculator.prototype.setAndGiveAns = function(result) {
+  this.ans = result;
+  return result;
+}
+
+Calculator.prototype.getAns = function() {
   return this.ans;
 }
 
