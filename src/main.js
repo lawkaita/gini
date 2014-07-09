@@ -19,7 +19,6 @@ function keypress(event) {
   
   if (event.keyCode === 13) {
     
-    
     var inputText = input.value;
     mainInput.value = "";
     
@@ -36,20 +35,14 @@ function keypress(event) {
       var feedbackTextNode = document.createTextNode(feedback);
       feedbackCell.appendChild(feedbackTextNode);
       
-      
       var div = document.getElementById('textWindow');
       scrollDown(div);
     }
-
   }
 }
 
 function commandFeedback(inputText) {
-  if (inputText == "fail") {
-    return "[FAIL]";
-  } else {
-    return "[OK]";
-  }
+  return run(inputText);
 }
 
 function scrollDown(myDiv) {
