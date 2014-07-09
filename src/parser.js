@@ -1,6 +1,23 @@
 var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
 var alphaNumericCharacterRegex = /\b\w\b/;
 
+var verbs = {
+  "add": addCreatureCommand, 
+  "remove": removeCreatureCommand, 
+  "init":changeInitiativeCommand, 
+  "dmg": dealDamageCommand,
+  "clear": clearEncounterCommand, 
+  "print": printHelpCommand, 
+  "comment": commentCreatureCommand, 
+  "uncomment": uncommentCreatureCommand,
+  
+  //math
+  "sum": sumCommand,
+  "dice": throwDiceCommand,
+  "number": returnAsNumber,
+  "ans": ansCommand
+};
+
 function addCreatureCommand(params) {
   var name = params[0];
   var initiativeToBeResolved = params[1];
@@ -62,8 +79,11 @@ function sumCommand(params) {
 }
 
 function throwDiceCommand(params) {
-  var times = params[0];
-  var diceSize = params[1];
+  var timesToBeResolved = params[0];
+  var diceSizeToBeResolved = params[1];
+  
+  var times = runParsed(timesToBeResolved);
+  var diceSize = runParsed(diceSizeToBeResolved);
   
   return calc.throwDice(times, diceSize);
 }
@@ -71,23 +91,6 @@ function throwDiceCommand(params) {
 function ansCommand() {
   return calc.getAns();
 }
-
-var verbs = {
-  "add": addCreatureCommand, 
-  "remove": removeCreatureCommand, 
-  "init":changeInitiativeCommand, 
-  "dmg": dealDamageCommand,
-  "clear": clearEncounterCommand, 
-  "print": printHelpCommand, 
-  "comment": commentCreatureCommand, 
-  "uncomment": uncommentCreatureCommand,
-  
-  //math
-  "sum": sumCommand,
-  "dice": throwDiceCommand,
-  "number": returnAsNumber,
-  "ans": ansCommand
-};
 
 function parse(command) {
   var parsed;
@@ -225,9 +228,11 @@ function parseDice(command) {
     parts[0] = "1";
   }
   
+  var parsedParts = parts.map(parse);
+  
   var parsed = {
     command: "dice",
-    params: parts
+    params: parsedParts
   }
   
   return parsed;
