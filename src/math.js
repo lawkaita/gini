@@ -36,4 +36,12 @@ Calculator.prototype.sum = function(summands) {
   return this.setAndGiveAns(sum);
 }
 
+Calculator.prototype.permilDivision = function(numerator, denominator) {
+  if (denominator === 0) {
+    return undefined;
+  }
+  
+  return Math.floor(numerator/denominator)*100;
+}
+
 var calc = new Calculator();

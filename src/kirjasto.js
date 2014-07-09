@@ -5,7 +5,7 @@ var nextCreatureId = 0;
 var success = "[OK]"
 
 function addCreature(name, initiative, hp) {
-    var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, hpPercent: 100};
+    var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
     database.push(creature);
     nextCreatureId++;
     
@@ -13,8 +13,6 @@ function addCreature(name, initiative, hp) {
 }
 
 function initWindow() {
-    console.log(11345);
-
     addCreature('Aboleth', 12, 100);
     addCreature('uthal', 5, 0);
     addCreature('kobold123', 36, 77);
@@ -24,12 +22,12 @@ function initWindow() {
     foo.appendChild(text);
 }
 
-function getCreatureIndex(creatureId) {
+function getCreatureIndex(attribute, attributeName) {
     for(var i in database) {
         var creature = database[i];
-        var currentId = creature['id'];
+        var currentAttribute = creature[attributeName];
 
-        if (currentId == creatureId) {
+        if (currentAttribute == attribute) {
             return i;
         }
     }
@@ -39,7 +37,7 @@ function getCreatureIndex(creatureId) {
 
 function getDeleteClicked(creatureId) {
     var deleteClicked = function() {
-        var index = getCreatureIndex(creatureId);
+        var index = getCreatureIndex(creatureId, 'id');
 
         console.assert(index != null);
 
@@ -60,6 +58,18 @@ function createRow(creature) {
     var initiativeText = document.createTextNode(initiative);
     var initiativeCell = document.createElement('td');
     initiativeCell.appendChild(initiativeText);
+    
+    var hp = creature['hp'];
+    var maxHp = creature['maxHp'];
+    var hpText = document.createTextNode(hp + '/' + maxHp);
+    var hpCell = document.createElement('td');
+    hpCell.appendChild(hpText);
+    
+    var hpPercent = calc.permilDivision(hp, maxHp);
+    var hpPercentText = document.createTextNode(hpPercent);
+    var hpPercentCell = document.createElement('td');
+    hpPercentCell.appendChild(hpPercentText);
+    
 
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
@@ -73,6 +83,8 @@ function createRow(creature) {
     var row = document.createElement('tr');
     row.appendChild(nameCell);
     row.appendChild(initiativeCell);
+    row.appendChild(hpCell);
+    row.appendChild(hpPercentCell);
     row.appendChild(buttonCell);
     return row;
 }
@@ -83,11 +95,14 @@ function addClicked() {
     
     var initiativeElement = document.getElementById('initiative');
     var initiative = initiativeElement.value;
+    
+    var hpElement = document.getElementById('hp');
+    var hp = hpElement.value;
 
-    addCreature(name, initiative, 0);
+    addCreature(name, initiative, hp);
 
     updateUi();
-    console.log('pekka ' + name);
+    console.log(name);
 }
 
 function createAddUi() {
@@ -102,6 +117,14 @@ function createAddUi() {
     initiativeInput.setAttribute('id', 'initiative');
     var initiativeCell = document.createElement('td');
     initiativeCell.appendChild(initiativeInput);
+    
+    var hpInput = document.createElement('input');
+    hpInput.setAttribute('type', 'text');
+    hpInput.setAttribute('id', 'hp');
+    var hpCell = document.createElement('td');
+    hpCell.appendChild(hpInput);
+    
+    var emtyCell = document.createElement('td');
 
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
@@ -113,6 +136,8 @@ function createAddUi() {
     var row = document.createElement('tr');
     row.appendChild(nameCell);
     row.appendChild(initiativeCell);
+    row.appendChild(hpCell);
+    row.appendChild(emtyCell);
     row.appendChild(buttonCell);
 
     return row;
@@ -160,13 +185,12 @@ function creatureWithNameExists(nameToSearch) {
   
   for (i = 0; i < database.length; i++) {
     var creature = database[i];
-    var name = creature[name];
+    var name = creature['name'];
     
     if(name === nameToSearch) {
       exists = true;
     }
   }
-  
   
   return exists;
 }

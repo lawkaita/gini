@@ -31,6 +31,10 @@ h1 {
   width: 100%;
 }
 
+#hp {
+  width: 100%;
+}
+
 .mainInput {
   background-color: #FF8800;
   color: white;

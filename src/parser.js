@@ -1,15 +1,38 @@
 var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
+var alphaNumericCharacterRegex = /\b\w\b/;
 
 function addCreatureCommand(params) {
   var name = params[0];
   var initiativeToBeResolved = params[1];
   var initiative = runParsed(initiativeToBeResolved);
   
-  var feedback = addCreature(name, initiative, 0);
+  var hpToBeResolved = params[2];
+  var hp = runParsed(hpToBeResolved);
+  
+  var feedback = addCreature(name, initiative, hp);
   updateUi();
   
   return feedback;
   
+}
+
+function lastIndexOf(string, char) {
+  lastIndex = undefined;
+  
+  for (var i in string){
+    if (string[i] === char) {
+      lastIndex = i;
+    }
+  }
+  
+  return parseInt(lastIndex);
+}
+
+function splitAtIndex(string, index) {
+  var first = string.slice(0, index);
+  var second = string.slice(index + 1);
+  
+  return [first, second];
 }
 
 function removeCreatureCommand() {
@@ -235,10 +258,36 @@ function isSentence(command) {
   return objectContainsKey(verbs, supposedVerb);
 }
 
+function parseAdd(splitted) {
+  var verb = splitted[0];
+  var rest = splitted[1];
+  
+  var nameAndMath = splitByWhitespaceOnce(rest);
+  var name = nameAndMath[0];
+  var math = nameAndMath[1];
+
+  var lastWhitespaceIndex = lastIndexOf(math, ' ');
+  var initAndHp = splitAtIndex(math, lastWhitespaceIndex);
+  var initiativeString = initAndHp[0];
+  var hpString = initAndHp[1];
+  
+  var parsed = {
+    command: verb,
+    params: [name, parseMath(initiativeString), parseMath(hpString)]
+  }
+  
+  return parsed;  
+}
+
 function parseSentence(commands) {
   var splitted = splitByWhitespaceOnce(commands);
   var verb = splitted[0];
   var rest = splitted[1];
+  
+  if(verb === "add") {
+    return parseAdd(splitted);
+  }
+  
   var restSplitted = splitByWhitespaceOnce(rest);
   
   var restToMathIfMath = [];
@@ -255,6 +304,63 @@ function parseSentence(commands) {
   
   return parsed;
 }
+
+function scanFirstSumLike(string) {
+  var firstPlusIndex = string.indexOf("+");
+  var prefix = string.slice(0, firstPlusIndex);
+  var trimmed = prefix.trim();
+  var lastWhiteSpaceIndexBeforeFirstRelevantSymbol = trimmed.lastIndexOf(" ");
+  var firstRelevantIndex = lastWhiteSpaceIndexBeforeFirstRelevantSymbol + 1;
+  
+  var toRead = string.slice(firstRelevantIndex);
+  
+  var readSymbol = "";
+  var proceed = true;
+  var expectingPlus = false;
+  var expectingAlNuChar = true;
+  var lastReadWasWhiteSpace = false;
+  var readpoint = 0;
+  var lastRelevantSymbolPoint = -1;
+  
+
+  while(proceed) {
+    readSymbol = toRead[readpoint];
+    
+    if (alphaNumericCharacterRegex.test(readSymbol)) {
+      if (lastReadWasWhiteSpace && !expectingAlNuChar) {
+        proceed = false;
+      } else {
+        lastRelevantSymbolPoint = readpoint;
+        expectingAlNuChar = false;
+        expectingPlus = true;
+        lastReadWasWhiteSpace = false;
+      }
+    }
+    
+    if (readSymbol === " ") {
+      lastReadWasWhiteSpace = true;
+    }
+    
+    if (readSymbol === "+") {
+      if (!expectingPlus) {
+        proceed = false;
+      } else {
+        expectingAlNuChar = true;
+        expectingPlus = false;
+      }
+    }
+    
+    readpoint++;
+    
+    if (readpoint >= toRead.length) {
+      proceed = false;
+    }
+  }
+  
+  var lastRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint;
+  
+  return [firstRelevantIndex, lastRelevantIndex];
+} 
 
 function parseIfMath(param) {
   if (isMath(param)) {
