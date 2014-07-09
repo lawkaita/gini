@@ -26,9 +26,16 @@ function keypress(event) {
     if(inputText !== "") {
       var rowCount = textWindow.rows.length;
       var row = textWindow.insertRow(rowCount);
-      var cell = row.insertCell(0);
-      var textNode = document.createTextNode(inputText);
-      cell.appendChild(textNode);
+      
+      var inputCell = row.insertCell(0);
+      var inputTextNode = document.createTextNode(inputText);
+      inputCell.appendChild(inputTextNode);
+      
+      var feedbackCell = row.insertCell(1);
+      var feedback = commandFeedback(inputText);
+      var feedbackTextNode = document.createTextNode(feedback);
+      feedbackCell.appendChild(feedbackTextNode);
+      
       
       var div = document.getElementById('textWindow');
       scrollDown(div);
@@ -37,9 +44,16 @@ function keypress(event) {
   }
 }
 
+function commandFeedback(inputText) {
+  if (inputText == "fail") {
+    return "[FAIL]";
+  } else {
+    return "[OK]";
+  }
+}
+
 function scrollDown(myDiv) {
   myDiv.scrollTop = myDiv.scrollHeight;
 }
 
 document.addEventListener('DOMContentLoaded', init);
-window.re

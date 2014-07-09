@@ -1,19 +1,19 @@
 var database = [];
 
-var nextMonsterId = 0;
+var nextCreatureId = 0;
 
-function addMonster(name, initiative, hp) {
-    var monster = {id: nextMonsterId, name: name, inikka: initiative, hp: hp, hpPercent: 100};
-    database.push(monster);
-    nextMonsterId++;
+function addCreature(name, initiative, hp) {
+    var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, hpPercent: 100};
+    database.push(creature);
+    nextCreatureId++;
 }
 
 function initWindow() {
     console.log(11345);
 
-    addMonster('Aboleth', 12, 100);
-    addMonster('uthal', 5, 0);
-    addMonster('kobold123', 36, 77);
+    addCreature('Aboleth', 12, 100);
+    addCreature('uthal', 5, 0);
+    addCreature('kobold123', 36, 77);
 
     var foo = document.querySelector("#creaturesWindow");
     var text = createUi(database);
