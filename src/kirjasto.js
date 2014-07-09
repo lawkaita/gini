@@ -22,6 +22,13 @@ function initWindow() {
     foo.appendChild(text);
 }
 
+function deleteCreatureByName(name) {
+  var index = getCreatureIndex(name, 'name');
+  deleteCreatureFromIndex(index);
+  
+  return success;
+}
+
 function getCreatureIndex(attribute, attributeName) {
     for(var i in database) {
         var creature = database[i];
@@ -41,11 +48,15 @@ function getDeleteClicked(creatureId) {
 
         console.assert(index != null);
 
-        database.splice(index, 1);
+        deleteCreatureFromIndex(index);
         updateUi();
     };
 
     return deleteClicked;
+}
+
+function deleteCreatureFromIndex(index) {
+  database.splice(index, 1);
 }
 
 function createRow(creature) {    

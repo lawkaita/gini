@@ -35,8 +35,13 @@ function splitAtIndex(string, index) {
   return [first, second];
 }
 
-function removeCreatureCommand() {
+function removeCreatureCommand(params) {
+  var name = params[0];
+  var feedback = deleteCreatureByName(name);
   
+  updateUi();
+  
+  return feedback;
 }
 
 var changeInitiativeCommand;
@@ -86,25 +91,7 @@ var verbs = {
 
 function parse(command) {
   var parsed;
-  
-  /*
-  var parsed = {
-    command: parts[0],
-    params: parts.slice(1)
-  }
-  
-  var parsed = {
-    command: "add",
-    params: ["pekka", {
-      command: "sum",
-      params: [{
-        command: "dice",
-        params: [1, 20]
-      }, 4]
-    }]
-  }
-  */
-  
+
   if (isSentence(command)) {
     parsed = parseSentence(command);
   }
@@ -130,7 +117,6 @@ function isSumAndOnlySum(command) {
   }
   
   var summands = splitToSummands(command);
-  
   return areSummamble(summands);
 }
 
@@ -267,7 +253,7 @@ function parseAdd(splitted) {
   var verb = splitted[0];
   var rest = splitted[1];
   
-  var nameAndMath = splitByWhitespaceOnce(rest);
+  var nameAndMath = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
   var name = nameAndMath[0];
   var math = nameAndMath[1];
 
@@ -284,16 +270,32 @@ function parseAdd(splitted) {
   return parsed;  
 }
 
-function parseSentence(commands) {
-  var splitted = splitByWhitespaceOnce(commands);
+function parseOneWordSentence(commandString) {
+  var parsed = {
+    command: commandString,
+    params: []
+  }
+  
+  return parsed;
+}
+
+function parseSentence(command) {
+  var commandPieces = command.split(" ");
+  var numberOfPieces = commandPieces.length;
+  
+  if (numberOfPieces <= 1) {
+    return parseOneWordSentence(command);
+  }
+  
+  var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(command);
   var verb = splitted[0];
   var rest = splitted[1];
   
   if(verb === "add") {
     return parseAdd(splitted);
   }
-  
-  var restSplitted = splitByWhitespaceOnce(rest);
+
+  var restSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
   
   var restToMathIfMath = [];
   for(i = 0; i < restSplitted.length; i++) {
@@ -308,6 +310,14 @@ function parseSentence(commands) {
   }
   
   return parsed;
+}
+
+function parseIfMath(param) {
+  if (isMath(param)) {
+    return parseMath(param);
+  } else {
+    return param;
+  }
 }
 
 function scanFirstSumLike(string) {
@@ -367,19 +377,19 @@ function scanFirstSumLike(string) {
   return [firstRelevantIndex, lastRelevantIndex];
 } 
 
-function parseIfMath(param) {
-  if (isMath(param)) {
-    return parseMath(param);
-  } else {
-    return param;
+function splitByWhitespaceOnceIfContainsWhiteSpace(string) {
+  if (!(typeof(string) === "string")) {
+    return undefined;
   }
-}
-
-function splitByWhitespaceOnce(string) {
+  
   var parts = string.split(" ");
   var first = parts[0];
   var restParts = parts.slice(1);
   var rest = restParts.join(" ");
+  
+  if(isBlank(rest)) {
+    return [first];
+  }
   
   return [first, rest];
 }
