@@ -1,7 +1,15 @@
 var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
 
 function addCreatureCommand(params) {
-  ;
+  var name = params[0];
+  var initiativeToBeResolved = params[1];
+  var initiative = runParsed(initiativeToBeResolved);
+  
+  var feedback = addCreature(name, initiative, 0);
+  updateUi();
+  
+  return feedback;
+  
 }
 
 function removeCreatureCommand() {
@@ -41,6 +49,8 @@ var verbs = {
   "print": printHelpCommand, 
   "comment": commentCreatureCommand, 
   "uncomment": uncommentCreatureCommand,
+  
+  //math
   "sum": sumCommand,
   "dice": throwDiceCommand,
   "number": returnAsNumber
@@ -225,11 +235,51 @@ function isSentence(command) {
   return objectContainsKey(verbs, supposedVerb);
 }
 
+function parseSentence(commands) {
+  var splitted = splitByWhitespaceOnce(commands);
+  var verb = splitted[0];
+  var rest = splitted[1];
+  var restSplitted = splitByWhitespaceOnce(rest);
+  
+  var restToMathIfMath = [];
+  for(i = 0; i < restSplitted.length; i++) {
+    var param = restSplitted[i];
+    
+    restToMathIfMath[i] = parseIfMath(param);
+  }
+  
+  var parsed = {
+    command: verb,
+    params: restToMathIfMath
+  }
+  
+  return parsed;
+}
+
+function parseIfMath(param) {
+  if (isMath(param)) {
+    return parseMath(param);
+  } else {
+    return param;
+  }
+}
+
+function splitByWhitespaceOnce(string) {
+  var parts = string.split(" ");
+  var first = parts[0];
+  var restParts = parts.slice(1);
+  var rest = restParts.join(" ");
+  
+  return [first, rest];
+}
+
+/*
 function interpretSentence(params) {
   var verb = verbs[params[0]];
   var restOfParams = params.slice(1);
   verb(restOfParams);
 }
+*/
 
 function arrayContainsObject(array, object) {
   var contains = false;
@@ -247,7 +297,7 @@ function objectContainsKey(object, key) {
   return !(typeof(object[key]) === typeof(undefined));
 }
 
-function run(command) {
+function runCommandString(command) {
   var parsed = parse(command);
   var commandName = parsed['command'];
   var command = verbs[commandName];

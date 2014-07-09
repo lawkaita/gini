@@ -2,10 +2,14 @@ var database = [];
 
 var nextCreatureId = 0;
 
+var success = "[OK]"
+
 function addCreature(name, initiative, hp) {
     var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, hpPercent: 100};
     database.push(creature);
     nextCreatureId++;
+    
+    return success;
 }
 
 function initWindow() {
@@ -80,7 +84,7 @@ function addClicked() {
     var initiativeElement = document.getElementById('initiative');
     var initiative = initiativeElement.value;
 
-    addMonster(name, initiative, 0);
+    addCreature(name, initiative, 0);
 
     updateUi();
     console.log('pekka ' + name);
@@ -149,5 +153,21 @@ function updateUi() {
     var oldTable = document.getElementById('ui');
     var container = oldTable.parentElement;
     container.replaceChild(newTable, oldTable);    
+}
+
+function creatureWithNameExists(nameToSearch) {
+  var exists = false;
+  
+  for (i = 0; i < database.length; i++) {
+    var creature = database[i];
+    var name = creature[name];
+    
+    if(name === nameToSearch) {
+      exists = true;
+    }
+  }
+  
+  
+  return exists;
 }
 

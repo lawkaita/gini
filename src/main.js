@@ -42,7 +42,7 @@ function keypress(event) {
 }
 
 function commandFeedback(inputText) {
-  return run(inputText);
+  return runCommandString(inputText);
 }
 
 function scrollDown(myDiv) {
