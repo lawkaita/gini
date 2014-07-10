@@ -425,6 +425,11 @@ function objectContainsKey(object, key) {
 
 function runCommandString(userInput) {
   var parsed = parse(userInput);
+  
+  if (parsed === undefined) {
+    return "[SYNTAX ERROR]";
+  }
+  
   var commandName = parsed['command'];
   var commandToRun = verbs[commandName];
   var params = parsed['params'];
@@ -433,6 +438,10 @@ function runCommandString(userInput) {
 }
 
 function runParsed(parsed) {
+  if (parsed === undefined) {
+    return "[SYNTAX ERROR]";
+  }
+  
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];

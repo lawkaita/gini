@@ -34,10 +34,9 @@ function keypress(event) {
       var feedback = commandFeedback(inputText);
       var feedbackTextNode = document.createTextNode(feedback);
       feedbackCell.appendChild(feedbackTextNode);
-      
-      var div = document.getElementById('textWindow');
-      scrollDown(div);
     }
+    var div = document.getElementById('textWindow');
+    scrollDown(div);
   }
 }
 

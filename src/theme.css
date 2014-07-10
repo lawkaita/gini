@@ -4,7 +4,7 @@ html {
 
 body {
   background-color: gray;
-  font-family: 'Consolas', sans-serif;
+  font-family: 'Consolas', monospace;
   font-size: 8px;
   color: white;
   
@@ -36,32 +36,17 @@ h1 {
 }
 
 .mainInput {
-  background-color: #FF8800;
+  background-color: black;
   color: white;
-  font-family: 'Consolas' sans-serif;
+  font-family: 'Consolas' monospace;
   font-size: 12px;
   border-color: black;
   
   border: 0px;
   margin: 1px 0 0 3px;
   padding: 0;
-}
-
-
-*::-webkit-input-placeholder {
-    color: red;
-}
-*:-moz-placeholder {
-    /* FF 4-18 */
-    color: red;
-}
-*::-moz-placeholder {
-    /* FF 19+ */
-    color: red;
-}
-*:-ms-input-placeholder {
-    /* IE 10+ */
-    color: red;
+  
+  min-width: 300px;
 }
 
 *:focus {
@@ -69,14 +54,17 @@ h1 {
 }
 
 .textRows {
-  background-color: blue;
+  background-color: black;
   color: white;
-  font-family: 'Consolas' sans-serif;
+  font-family: 'Consolas' monospace;
   font-size: 12px;
+  max-width: 300px;
+  width: 300px;
 }
 
 #textWindow {
   background-color: black;
   max-height: 300px;
+  max-width: 400px;
   overflow: auto;
 }
