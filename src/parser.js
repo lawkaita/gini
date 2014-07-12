@@ -92,8 +92,6 @@ function healCommand(params) {
 function clearEncounterCommand() {
   database = [];
   updateUi();
-  
-  
 }
 
 var printHelpCommand;
@@ -106,7 +104,6 @@ function returnAsNumber(param) {
 
 function sumCommand(params) {
   var summands = params.map(runParsed);
-  
   return calc.sum(summands);
 }
 
@@ -139,11 +136,11 @@ function parse(command) {
 }
 
 function isMath(command) {
-  return isSumAndOnlySum(command) || isDice(command) || isNumberString(command);
+  return isSumAndOnlySum(command) || isDice(command) || isNumberString(command) || isAns(command);
 }
 
 function isMathNotSum(command) {
-  return isDice(command) || isNumberString(command);
+  return isDice(command) || isNumberString(command) || isAns(command);
 }
  
 function isSumAndOnlySum(command) {
@@ -198,11 +195,15 @@ function isNumberString(string) {
 }
 
 function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
+  return (!str || /^\s*$/.test(str));
 }
 
 function isNumber(object) {
   return !isNaN(object) && (typeof(object) === "number");
+}
+
+function isAns(string) {
+  return (string === "ans");
 }
 
 function parseMath(command) {
@@ -218,6 +219,10 @@ function parseMath(command) {
   
   if(isNumberString(command)) {
     parsed = parseNumber(command);
+  }
+  
+  if(isAns(command)) {
+    parsed = parseAns(command);
   }
   
   return parsed;
@@ -247,6 +252,10 @@ function parseSummands(summands) {
     
     if(isDice(summand)) {
       parsedSummands[i] = parseDice(summand);
+    }
+    
+    if(isAns(summand)) {
+      parsedSummands[i] = parseAns(summand);
     }
   }
   
@@ -279,9 +288,22 @@ function parseNumber(command) {
   return parsed;
 }
 
+function parseAns(command) {
+  var parsed = {
+    command: "ans",
+    params: []
+  }
+  
+  return parsed;
+}
+
 function isSentence(command) {
   var parts = command.split(" ");
   var supposedVerb = parts[0];
+  
+  if(isAns(supposedVerb)) {
+    return false;
+  }
   
   return objectContainsKey(verbs, supposedVerb);
 }
