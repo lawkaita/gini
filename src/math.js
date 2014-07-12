@@ -41,7 +41,7 @@ Calculator.prototype.permilDivision = function(numerator, denominator) {
     return undefined;
   }
   
-  return Math.floor(numerator/denominator)*100;
+  return (Math.floor((numerator/denominator)*1000))/10;
 }
 
 var calc = new Calculator();

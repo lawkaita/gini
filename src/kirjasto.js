@@ -26,6 +26,22 @@ function deleteCreatureByName(name) {
   var index = getCreatureIndex(name, 'name');
   deleteCreatureFromIndex(index);
   
+  updateUi();
+  return success;
+}
+
+function changeCreatureInitiativeByName(name, initiative) {
+  var index = getCreatureIndex(name, 'name');
+  database[index].inikka = initiative;
+  updateUi();
+  return success;
+}
+
+function damageCreatureByName(name, dmg) {
+  var index = getCreatureIndex(name, 'name');
+  var creature = database[index];
+  creature.hp = creature.hp - dmg;
+  updateUi();
   return success;
 }
 

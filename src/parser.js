@@ -6,8 +6,11 @@ var verbs = {
   "remove": removeCreatureCommand, 
   "init":changeInitiativeCommand, 
   "dmg": dealDamageCommand,
+  "harm": dealDamageCommand,
+  "hurt": dealDamageCommand,
+  "heal": healCommand,
   "clear": clearEncounterCommand, 
-  "print": printHelpCommand, 
+  "help": printHelpCommand, 
   "comment": commentCreatureCommand, 
   "uncomment": uncommentCreatureCommand,
   
@@ -27,8 +30,8 @@ function addCreatureCommand(params) {
   var hp = runParsed(hpToBeResolved);
   
   var feedback = addCreature(name, initiative, hp);
-  updateUi();
   
+  updateUi();
   return feedback;
   
 }
@@ -56,14 +59,43 @@ function removeCreatureCommand(params) {
   var name = params[0];
   var feedback = deleteCreatureByName(name);
   
-  updateUi();
-  
   return feedback;
 }
 
-var changeInitiativeCommand;
-var dealDamageCommand;
-var clearEncounterCommand;
+function changeInitiativeCommand(params) {
+  var name = params[0];
+  var initiativeToBeResloved = params[1];
+  var initiative = runParsed(initiativeToBeResolved);
+  
+  var feedback = changeCreatureInitiativeByName(name, initiative);
+  return feedback;
+}
+
+function dealDamageCommand(params) {
+  var name = params[0];
+  var dmgToBeResolved = params[1];
+  var damage = runParsed(dmgToBeResolved);
+  
+  var feedback = damageCreatureByName(name, damage);
+  return feedback;
+}
+
+function healCommand(params) {
+  var name = params[0];
+  var dmgToBeResolved = params[1];
+  var damage = 0 - runParsed(dmgToBeResolved);
+  
+  var feedback = damageCreatureByName(name, damage);
+  return feedback;
+}
+
+function clearEncounterCommand() {
+  database = [];
+  updateUi();
+  
+  
+}
+
 var printHelpCommand;
 var commentCreatureCommand;
 var uncommentCreatureCommand;
@@ -342,6 +374,8 @@ function scanFirstSumLike(string) {
   var readpoint = 0;
   var lastRelevantSymbolPoint = -1;
   
+  var atLeastOnePlusSymbol = false;
+  
 
   while(proceed) {
     readSymbol = toRead[readpoint];
@@ -365,6 +399,7 @@ function scanFirstSumLike(string) {
       if (!expectingPlus) {
         proceed = false;
       } else {
+        atleastOnePlusSymnbol = true;
         expectingAlNuChar = true;
         expectingPlus = false;
       }
@@ -377,9 +412,13 @@ function scanFirstSumLike(string) {
     }
   }
   
-  var lastRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint;
+  if (!atleastOnePlusSymbol) {
+    return [0, 0];
+  }
   
-  return [firstRelevantIndex, lastRelevantIndex];
+  var lastNonRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint + 1;
+  
+  return [firstRelevantIndex, lastNonRelevantIndex];
 } 
 
 function splitByWhitespaceOnceIfContainsWhiteSpace(string) {
