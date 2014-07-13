@@ -17,6 +17,7 @@ var verbs = {
   //math
   "sum": sumCommand,
   "dice": throwDiceCommand,
+  "minus": minusCommand,
   "number": returnAsNumber,
   "ans": ansCommand
 };
@@ -46,6 +47,16 @@ function lastIndexOf(string, char) {
   }
   
   return parseInt(lastIndex);
+}
+
+function firstIndexOf(string, chars) {
+  for (var i in string){
+    if (arrayContainsObject(chars, string[i])) {
+      return i;
+    }
+  }
+  
+  return -1;
 }
 
 function splitAtIndex(string, index) {
@@ -107,6 +118,13 @@ function sumCommand(params) {
   return calc.sum(summands);
 }
 
+function minusCommand(params) {
+  var toMinusToBeResolved = params[0];
+  var toMinus = runParsed(toMinusToBeResolved);
+  
+  return (-1)*toMinus;
+}
+
 function throwDiceCommand(params) {
   var timesToBeResolved = params[0];
   var diceSizeToBeResolved = params[1];
@@ -136,11 +154,11 @@ function parse(command) {
 }
 
 function isMath(command) {
-  return isSumAndOnlySum(command) || isDice(command) || isNumberString(command) || isAns(command);
+  return isSumAndOnlySum(command) || isDice(command) || isMinus(command) ||isNumberString(command) || isAns(command);
 }
 
 function isMathNotSum(command) {
-  return isDice(command) || isNumberString(command) || isAns(command);
+  return isDice(command) || isMinus(command) || isNumberString(command) || isAns(command);
 }
  
 function isSumAndOnlySum(command) {
@@ -152,8 +170,33 @@ function isSumAndOnlySum(command) {
   return areSummamble(summands);
 }
 
+function addPlusBeforeMinus(command) {
+  if (command[0] === "-") {
+    command = "0 " + command;
+  }
+  
+  readpoint = 0;
+  while(readpoint < command.length) {
+    symbolAtPoint = command[readpoint];
+    if (symbolAtPoint === "-") {
+      parts = splitAtIndex(command, readpoint);
+      var toAppend = "+ -";
+      
+      command = parts[0] + toAppend + parts[1];
+      
+      readpoint++;
+      readpoint++;
+    }
+    
+    readpoint++;
+  }
+  
+  return command;
+}
+
 function splitToSummands(command) {
-  var summands = command.split('+');
+  var toProcess = addPlusBeforeMinus(command);
+  var summands = toProcess.split('+');
   
   for (var i = 0; i < summands.length; i++) {
     var trimmed = summands[i].trim();
@@ -190,6 +233,17 @@ function isDice(string) {
   return diceRegex.test(string) && (string.length <= 4);
 }
 
+function isMinus(string) {
+  if (string[0] === "-") {
+    var rest = string.slice(1);
+    var trimmed = rest.trim();
+    
+    return isMathNotSum(rest);
+  }
+  
+  return false;
+}
+
 function isNumberString(string) {
   return !isNaN(string) && (typeof(string) === "string") && !isBlank(string);
 }
@@ -213,15 +267,19 @@ function parseMath(command) {
     parsed = parseSum(command);
   }
   
-  if(isDice(command)) {
+  if (isDice(command)) {
     parsed = parseDice(command);
   }
   
-  if(isNumberString(command)) {
+  if (isMinus(command)) {
+    parsed = parseMinus(command);
+  }
+  
+  if (isNumberString(command)) {
     parsed = parseNumber(command);
   }
   
-  if(isAns(command)) {
+  if (isAns(command)) {
     parsed = parseAns(command);
   }
   
@@ -246,6 +304,9 @@ function parseSummands(summands) {
   for (i = 0; i < summands.length; i++) {
     var summand = summands[i];
     
+    parsedSummands[i] = parseMath(summand);
+    
+    /*
     if (isNumberString(summand)) {
       parsedSummands[i] = parseNumber(summand);
     }
@@ -254,9 +315,14 @@ function parseSummands(summands) {
       parsedSummands[i] = parseDice(summand);
     }
     
+    if (isMinus(command)) {
+      parsedSummands[i] = parseMinus(command);
+    }
+    
     if(isAns(summand)) {
       parsedSummands[i] = parseAns(summand);
     }
+    */
   }
   
   return parsedSummands;
@@ -274,6 +340,18 @@ function parseDice(command) {
   var parsed = {
     command: "dice",
     params: parsedParts
+  }
+  
+  return parsed;
+}
+
+function parseMinus(command) {
+  var toMinus = command.slice(1).trim();
+  var toMinusParsed = parse(toMinus);
+  
+  var parsed = {
+    command: "minus",
+    params: [toMinusParsed]
   }
   
   return parsed;
@@ -421,7 +499,7 @@ function parseIfMath(param) {
 }
 
 function scanFirstSumLike(string) {
-  var firstPlusIndex = string.indexOf("+");
+  var firstPlusIndex = firstIndexOf(string, ["+", "-"]);
   
   if(firstPlusIndex === -1) {
     return [0,0];
@@ -463,7 +541,7 @@ function scanFirstSumLike(string) {
       lastReadWasWhiteSpace = true;
     }
     
-    if (readSymbol === "+") {
+    if (readSymbol === "+" || readSymbol === "-") {
       if (!expectingPlus) {
         proceed = false;
       } else {
