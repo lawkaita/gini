@@ -495,7 +495,14 @@ function runCommandString(userInput) {
   var commandToRun = verbs[commandName];
   var params = parsed['params'];
   
-  return commandToRun(params);
+  var result = commandToRun(params);
+  
+  if(isNumber(result)) {
+    calc.setAns(result);
+    return " = " + result;
+  }
+  
+  return result;
 }
 
 function runParsed(parsed) {

@@ -2,9 +2,8 @@ function Calculator() {
   this.ans = 0;
 }
 
-Calculator.prototype.setAndGiveAns = function(result) {
+Calculator.prototype.setAns = function(result) {
   this.ans = result;
-  return result;
 }
 
 Calculator.prototype.getAns = function() {
@@ -23,7 +22,7 @@ Calculator.prototype.throwDice = function(timesToThrow, diceSize) {
     resultSum = resultSum + result;
   }
   
-  return this.setAndGiveAns(resultSum);
+  return resultSum;
 }
 
 Calculator.prototype.sum = function(summands) {
@@ -33,7 +32,7 @@ Calculator.prototype.sum = function(summands) {
     sum = sum + summands[i];
   }
   
-  return this.setAndGiveAns(sum);
+  return sum;
 }
 
 Calculator.prototype.permilDivision = function(numerator, denominator) {
