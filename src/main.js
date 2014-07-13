@@ -25,10 +25,10 @@ function keypress(event) {
       
       var row = printInput(inputText);
       
-      var feedbackCell = row.insertCell(1);
-      var feedback = commandFeedback(inputText);
-      var feedbackTextNode = document.createTextNode(feedback);
-      feedbackCell.appendChild(feedbackTextNode);
+      var outputCell = row.insertCell(1);
+      var output = commandOutput(inputText);
+      var outputTextNode = document.createTextNode(output);
+      outputCell.appendChild(outputTextNode);
       
       /*
       input = document.createElement('textarea');
@@ -73,7 +73,7 @@ function printInputLine(line) {
       return row;
 }
 
-function commandFeedback(inputText) {
+function commandOutput(inputText) {
   return runCommandString(inputText);
 }
 

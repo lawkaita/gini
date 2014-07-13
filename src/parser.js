@@ -338,7 +338,7 @@ function parseOneWordSentence(commandString) {
   return parsed;
 }
 
-function parseSentence(command) {
+function parseSentence_old(command) {
   var commandPieces = command.split(" ");
   var numberOfPieces = commandPieces.length;
   
@@ -371,6 +371,47 @@ function parseSentence(command) {
   return parsed;
 }
 
+function parseSentence(command) {
+  var firstSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(command);
+  var verb = firstSplitted[0];
+  var rest = firstSplitted[1];
+  
+  var paramArray = []
+  
+  while(true) {
+    if (isBlank(rest)) {
+      break;
+    }
+    
+    if (startsWithSumLike(rest)) {
+      var scanResult = scanFirstSumLike(rest);
+      var startIndexInclusive = scanResult[0];
+      var endIndexExclusive = scanResult[1];
+      
+      var sumToParse = rest.slice(startIndexInclusive, endIndexExclusive);
+      var parsedSum = parseSum(sumToParse);
+      paramArray.push(parsedSum);
+      
+      rest = rest.slice(endIndexExclusive + 1);
+      continue;
+    }
+    
+    var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
+    var toParse = splitted[0];
+    var toPush = parseIfMath(toParse);
+    paramArray.push(toPush);
+    
+    rest = splitted[1];
+  }
+  
+  var parsed = {
+    command: verb,
+    params: paramArray
+  }
+  
+  return parsed;
+}
+
 function parseIfMath(param) {
   if (isMath(param)) {
     return parseMath(param);
@@ -381,6 +422,11 @@ function parseIfMath(param) {
 
 function scanFirstSumLike(string) {
   var firstPlusIndex = string.indexOf("+");
+  
+  if(firstPlusIndex === -1) {
+    return [0,0];
+  }
+  
   var prefix = string.slice(0, firstPlusIndex);
   var trimmed = prefix.trim();
   var lastWhiteSpaceIndexBeforeFirstRelevantSymbol = trimmed.lastIndexOf(" ");
@@ -421,7 +467,7 @@ function scanFirstSumLike(string) {
       if (!expectingPlus) {
         proceed = false;
       } else {
-        atleastOnePlusSymnbol = true;
+        atLeastOnePlusSymbol = true;
         expectingAlNuChar = true;
         expectingPlus = false;
       }
@@ -434,14 +480,52 @@ function scanFirstSumLike(string) {
     }
   }
   
-  if (!atleastOnePlusSymbol) {
+  if (!atLeastOnePlusSymbol) {
     return [0, 0];
   }
   
-  var lastNonRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint + 1;
+  var firstNonRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint + 1;
   
-  return [firstRelevantIndex, lastNonRelevantIndex];
+  return [firstRelevantIndex, firstNonRelevantIndex];
 } 
+
+function containsSumLike(string) {
+  var scanResult = scanFirstSumLike(string);
+  var scannedLength = scanResult[1] - scanResult[0];
+  
+  if (scannedLength <= 0) {
+    return false;
+  }
+  
+  return true;
+}
+
+function startsWithSumLike(string) {
+  var scanResult = scanFirstSumLike(string);
+  var startIndexInclusive = scanResult[0];
+  var endIndexExclusive = scanResult[1];
+  var scannedLength = endIndexExclusive - startIndexInclusive;
+  
+  if ((scannedLength >= 1) && (startIndexInclusive === 0)) {
+    return true;
+  }
+  
+  return false;
+}
+
+function isSumLike(string) {
+  var scanResult = scanFirstSumLike(string);
+  var startIndexInclusive = scanResult[0];
+  var endIndexExclusive = scanResult[1];
+  var scannedLength = endIndexExclusive - startIndexInclusive;
+  
+  if ((scannedLength >= 1) && (startIndexInclusive === 0) && (endIndexExclusive === string.length)) {
+    return true;
+  }
+  
+  return false;
+  
+}
 
 function splitByWhitespaceOnceIfContainsWhiteSpace(string) {
   if (!(typeof(string) === "string")) {
