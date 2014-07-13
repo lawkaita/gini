@@ -69,14 +69,11 @@ function keypress(event) {
     var inputText = input.value;
     
     if(inputText !== "") {
-      recentCommands.push(inputText);
-      rci.index++;
       input.value = "";
-      
       var row = printInput(inputText);
       
       var outputCell = row.insertCell(1);
-      var output = commandOutput(inputText);
+      var output = send(inputText);
       var outputTextNode = document.createTextNode(output);
       outputCell.appendChild(outputTextNode);
       
@@ -123,8 +120,16 @@ function printInputLine(line) {
       return row;
 }
 
-function commandOutput(inputText) {
-  return runCommandString(inputText);
+function send(inputText) {
+  var output = runCommandString(inputText);
+  
+  if (output !== "[SYNTAX ERROR]") {
+    recentCommands.push(inputText);
+    rci.index++;
+  }
+  
+  return output;
+  
 }
 
 function scrollDown(myDiv) {
