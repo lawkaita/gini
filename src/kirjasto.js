@@ -77,8 +77,6 @@ function getCreatureIndex(attribute, attributeName) {
             return i;
         }
     }
-
-    return null;        
 }
 
 function getDeleteClicked(creatureId) {
@@ -95,7 +93,9 @@ function getDeleteClicked(creatureId) {
 }
 
 function deleteCreatureFromIndex(index) {
-  database.splice(index, 1);
+  if (typeof(index) === "number") {
+    database.splice(index, 1);
+  }
 }
 
 function createRow(creature) {    
