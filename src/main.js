@@ -3,25 +3,75 @@ var greeting = document.querySelector('#greeting');
 var input = document.getElementById('textarea');
 var textWindow = document.querySelector('#textRows');
 
+var recentCommands = [];
+var rci = new RecentCommandIterator();
+
 function init() {
   console.log(input);
 
   input.addEventListener('keydown', keypress);
   
+  /*
+  var mainInput = document.getElementById('mainInput');
+  mainInput.addEventListener('keydown', keypress);
+  */
+  
   initWindow();
   
+}
+
+function RecentCommandIterator() {
+  this.index = recentCommands.length;
+}
+
+RecentCommandIterator.prototype.moveUp = function() {
+  this.index--;
+  if (this.index < 0) {
+    this.index = 0;
+  }
+  
+  return this.getCommand();
+}
+
+RecentCommandIterator.prototype.moveDown = function () {
+  this.index++;
+  if (this.index > recentCommands.length) {
+    this.index = recentCommands.length;
+  }
+  
+  return this.getCommand();
+}
+
+RecentCommandIterator.prototype.getCommand = function () {
+  if (this.index === recentCommands.length) {
+    return "";
+  }
+  
+  return recentCommands[this.index];
 }
 
 function keypress(event) {
   console.log(event);
   
+  if (event.keyCode === 38) {
+    event.preventDefault();
+    input.value = rci.moveUp();
+  }
+  
+  if (event.keyCode == 40) {
+    input.value = rci.moveDown();
+  }
+  
   if (event.keyCode === 13) {
     event.preventDefault();
+    rci = new RecentCommandIterator();
     
     var inputText = input.value;
-    input.value = "";
-
+    
     if(inputText !== "") {
+      recentCommands.push(inputText);
+      rci.index++;
+      input.value = "";
       
       var row = printInput(inputText);
       
