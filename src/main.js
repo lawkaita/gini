@@ -1,7 +1,6 @@
 var greeting = document.querySelector('#greeting');
 //var input = document.querySelector('#mainInput');
 var input = document.getElementById('textarea');
-var textWindow = document.querySelector('#textRows');
 
 var recentCommands = [];
 var rci = new RecentCommandIterator();
@@ -110,6 +109,8 @@ function printInput(inputText) {
 }
 
 function printInputLine(line) {
+      var textWindow = document.querySelector('#textRows');
+  
       var rowCount = textWindow.rows.length;
       var row = textWindow.insertRow(rowCount);
   

@@ -103,6 +103,14 @@ function healCommand(params) {
 function clearEncounterCommand() {
   database = [];
   updateUi();
+  
+  var fromWhereToClear = document.getElementById('textField');
+  var toClear = document.getElementById('textRows');
+  var toAdd = document.createElement('table');
+  toAdd.setAttribute('class', 'textRows');
+  toAdd.setAttribute('id', 'textRows');
+  
+  fromWhereToClear.replaceChild(toAdd, toClear);
 }
 
 var printHelpCommand;

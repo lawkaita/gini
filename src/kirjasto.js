@@ -14,7 +14,7 @@ function addCreature(name, initiative, hp) {
 
 function initWindow() {
     addCreature('Aboleth', 12, 100);
-    addCreature('uthal', 5, 0);
+    addCreature('uthal', 5, 6);
     addCreature('kobold123', 36, 77);
 
     var foo = document.querySelector("#creaturesWindow");
