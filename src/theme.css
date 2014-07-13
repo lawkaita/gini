@@ -21,6 +21,15 @@ h1 {
 #ui {
   background-color: #595959;
   width: 100%;
+  border-spacing: 0;
+}
+
+.selectedRow {
+  background-color: green;
+}
+
+.notSelectedRow {
+  
 }
 
 #name {
@@ -95,5 +104,8 @@ h1 {
   margin: 0px 0 0 0px;
   padding: 0;
   
+  overflow: auto;
+  height: 300px;
+  max-height: 300px;
   
 }

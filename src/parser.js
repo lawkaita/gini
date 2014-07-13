@@ -13,6 +13,7 @@ var verbs = {
   "help": printHelpCommand, 
   "comment": commentCreatureCommand, 
   "uncomment": uncommentCreatureCommand,
+  "next": nextCommand,
   
   //math
   "sum": sumCommand,
@@ -116,6 +117,11 @@ function clearEncounterCommand() {
 var printHelpCommand;
 var commentCreatureCommand;
 var uncommentCreatureCommand;
+
+function nextCommand() {
+  nextInitiativeIndex();
+  updateUi();
+}
 
 function returnAsNumber(param) {
   return parseInt(param);

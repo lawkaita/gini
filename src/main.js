@@ -88,7 +88,8 @@ function keypress(event) {
       */
       
     }
-    var div = document.getElementById('textWindow');
+    //var div = document.getElementById('textWindow');
+    var div = document.getElementById('textField');
     scrollDown(div);
   }
 }

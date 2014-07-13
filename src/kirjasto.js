@@ -1,5 +1,7 @@
 var database = [];
 
+var initiativeIndex;
+
 var nextCreatureId = 0;
 
 var success = "[OK]"
@@ -20,6 +22,27 @@ function initWindow() {
     var foo = document.querySelector("#creaturesWindow");
     var text = createUi(database);
     foo.appendChild(text);
+}
+
+function nextInitiativeIndex() {
+  switch(true) {
+    case (initiativeIndex === undefined):
+      initiativeIndex = 0;
+      break;
+    case (initiativeIndex >= database.length - 1):
+      initiativeIndex = 0;
+      break;
+    default:
+      initiativeIndex++;
+  }
+}
+
+function highlightCreatureRow(index) {
+  database[index].setAttribute('class', 'selectedRow')
+}
+
+function unhighlightCreatureRow(index) {
+  
 }
 
 function deleteCreatureByName(name) {
@@ -96,11 +119,10 @@ function createRow(creature) {
     var hpPercentText = document.createTextNode(hpPercent);
     var hpPercentCell = document.createElement('td');
     hpPercentCell.appendChild(hpPercentText);
-    
 
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
-    button.setAttribute('value', 'remove')
+    button.setAttribute('value', 'remove');
     var creatureId = creature['id'];
     var deleteClicked = getDeleteClicked(creatureId);
     button.addEventListener('click', deleteClicked);
@@ -193,6 +215,13 @@ function createUi(creatures) {
     for(var i in sortedCreatures) {
         var creature = sortedCreatures[i];
         var testRow = createRow(creature);
+        
+        if (i == initiativeIndex) {
+          testRow.setAttribute('class', 'selectedRow');
+        } else {
+          testRow.setAttribute('class', 'notSelectedRow');
+        }
+        
         table.appendChild(testRow);
     }
     var addUi = createAddUi();
