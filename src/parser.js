@@ -119,8 +119,16 @@ var commentCreatureCommand;
 var uncommentCreatureCommand;
 
 function nextCommand() {
+  if(!clock.isOn) {
+    clock.start();
+  }
+  
   nextInitiativeIndex();
   updateUi();
+  
+  var toReturn = clock.outWrite();
+  clock.turnPassed();
+  return toReturn;
 }
 
 function returnAsNumber(param) {
