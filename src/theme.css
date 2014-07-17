@@ -47,7 +47,7 @@ h1 {
 .mainInput {
   background-color: black;
   color: white;
-  font-family: 'Consolas' monospace;
+  font-family: 'Consolas', monospace;
   font-size: 12px;
   border-color: black;
   
@@ -66,8 +66,8 @@ h1 {
 
 .textRows {
   background-color: black;
-  color: white;
-  font-family: 'Consolas' monospace;
+  color: orange;
+  font-family: 'Consolas', monospace;
   font-size: 12px;
   max-width: 400px;
   max-height: 300px;
@@ -77,8 +77,8 @@ h1 {
 
 #textarea {
   background-color: black;
-  color: white;
-  font-family: 'Consolas' monospace;
+  color: orange;
+  font-family: 'Consolas', monospace;
   font-size: 12px;
   border-color: black;
   
