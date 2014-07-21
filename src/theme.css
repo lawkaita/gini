@@ -4,13 +4,14 @@ html {
 
 body {
   background-color: gray;
-  font-family: 'Consolas', monospace;
+  font-family: consolas, monospace;
   font-size: 8px;
   color: white;
   
   padding: 10px;
   
-  width: 400px;
+  width: 80%;
+  min-width: 400px;
   margin: 0 auto;
 }
 
@@ -47,7 +48,7 @@ h1 {
 .mainInput {
   background-color: black;
   color: white;
-  font-family: 'Consolas', monospace;
+  font-family: consolas, monospace;
   font-size: 12px;
   border-color: black;
   
@@ -64,21 +65,25 @@ h1 {
     outline: none;
 }
 
-.textRows {
+#textRows {
   background-color: black;
   color: orange;
-  font-family: 'Consolas', monospace;
+  font-family: consolas, monospace;
   font-size: 12px;
-  max-width: 400px;
+  /*
+  max-width: 100%;
+  */
+  min-width: 100%;
+  /*
   max-height: 300px;
-  width: 300px;
   overflow: auto;
+  */
 }
 
-#textarea {
+#inputArea {
   background-color: black;
-  color: orange;
-  font-family: 'Consolas', monospace;
+  color: white;
+  font-family: consolas, monospace;
   font-size: 12px;
   border-color: black;
   
@@ -91,9 +96,83 @@ h1 {
   resize: none;
   max-width: 98%;
   min-width: 98%;
-  max-height 24px;
-  min-height: 24px;
+  min-height: 12px;
+}
+
+#oldInputArea {
+  background-color: black;
+  color: gray;
+  font-family: consolas, monospace;
+  font-size: 12px;
+  border-color: black;
   
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+  
+  overflow: hidden;
+  
+  resize: none;
+  max-width: 98%;
+  min-width: 98%;
+  min-height: 12px;
+}
+
+#outputArea {
+  background-color: black;
+  color: yellow;
+  font-family: consolas, monospace;
+  font-size: 12px;
+  border-color: black;
+  
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+  
+  overflow: hidden;
+  
+  resize: none;
+  max-width: 98%;
+  min-width: 98%;
+  min-height: 12px;
+}
+
+.inputRow {
+  color: #FF0000;
+  
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+.soutRow {
+  color: #00FFFF;
+  
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+.textRow {
+  color: white;
+  
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+#fontSizeTest {
+  color: black;
+  background-color: gray;
+  font-family: consolas, monospace;
+  font-size: 12px;
+  
+  border: 0;
+  margin: 0 0 0 0;
+  padding: 0;
+  
+  float: center;
+  bottom: 0;
 }
 
 #textField {
@@ -106,6 +185,7 @@ h1 {
   
   overflow: auto;
   height: 300px;
+  /*
   max-height: 300px;
-  
+  */
 }

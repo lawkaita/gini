@@ -3,6 +3,9 @@
   "name": "ginik",
   "description": "",
   "version": "0.1",
+  
+  "permissions": ["http://fonts.googleapis.com/css?family=VT323"],
+  
   "minimum_chrome_version": "23",
   "app": {
     "background": {
