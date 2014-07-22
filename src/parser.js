@@ -9,7 +9,7 @@ var verbs = {
   "harm": dealDamageCommand,
   "hurt": dealDamageCommand,
   "heal": healCommand,
-  "clear": clearEncounterCommand, 
+  "clear": clearCommand, 
   "help": printHelpCommand, 
   "comment": commentCreatureCommand, 
   "uncomment": uncommentCreatureCommand,
@@ -95,6 +95,16 @@ function healCommand(params) {
   return feedback;
 }
 
+function clearCommand(params) {
+  var param = params[0];
+  
+  if(param === undefined) {
+    return clearEncounterCommand();
+  } else if (param === 'console') {
+    return clearConsoleCommand();
+  }
+}
+
 function clearEncounterCommand() {
   database = [];
   clock = new Clock();
@@ -111,6 +121,8 @@ function clearConsoleCommand() {
   toAdd.setAttribute('id', 'textRows');
   
   fromWhereToClear.replaceChild(toAdd, toClear);
+  
+  return success;
 }
 
 var printHelpCommand;
