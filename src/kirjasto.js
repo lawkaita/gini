@@ -1,7 +1,8 @@
 var database = [];
 var initiativeIndex;
 var nextCreatureId = 0;
-var success = "[OK]"
+var success = "[OK]";
+var fail = "[FAIL]";
 
 function addCreature(name, initiative, hp) {
     var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
@@ -43,14 +44,19 @@ function unhighlightCreatureRow(index) {
 
 function deleteCreatureByName(name) {
   var index = getCreatureIndex(name, 'name');
-  deleteCreatureFromIndex(index);
-  
-  updateUi();
-  return success;
+  if(index !== undefined) {
+    deleteCreatureFromIndex(index);
+    updateUi();
+    return success;
+  }
+  return fail;
 }
 
 function changeCreatureInitiativeByName(name, initiative) {
   var index = getCreatureIndex(name, 'name');
+  if (index === undefined) {
+    return fail;
+  }
   database[index].inikka = initiative;
   updateUi();
   return success;
@@ -89,9 +95,8 @@ function getDeleteClicked(creatureId) {
 }
 
 function deleteCreatureFromIndex(index) {
-  if (typeof(index) === "number") {
-    database.splice(index, 1);
-  }
+  var parsed = parseInt(index);
+  database.splice(parsed, 1);
 }
 
 function createRow(creature) {    
