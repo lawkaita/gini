@@ -45,6 +45,30 @@ h1 {
   width: 100%;
 }
 
+.nameCell {
+  width: 25%;
+  max-width: 60%
+  overflow: hidden;
+}
+
+.nameDiv {
+  color: white;
+  font-family: consolas, monospace;
+  font-size: 12px;
+  
+  max-width: 140px;
+  overflow: hidden;
+}
+
+.numberCell {
+  color: white;
+  font-family: consolas, monospace;
+  font-size: 12px;
+  
+  width: 10%;
+  max-width: 10%;
+}
+
 .mainInput {
   background-color: black;
   color: white;

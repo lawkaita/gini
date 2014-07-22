@@ -103,22 +103,29 @@ function createRow(creature) {
     var name = creature['name'];
     var nameText = document.createTextNode(name);
     var nameCell = document.createElement('td');
-    nameCell.appendChild(nameText);
+    var nameDiv = document.createElement('div');
+    nameDiv.setAttribute('class', 'nameDiv');
+    nameDiv.appendChild(nameText);
+    nameCell.setAttribute('class', 'nameCell');
+    nameCell.appendChild(nameDiv);
 
     var initiative = creature['inikka'];
     var initiativeText = document.createTextNode(initiative);
     var initiativeCell = document.createElement('td');
+    initiativeCell.setAttribute('class', 'numberCell');
     initiativeCell.appendChild(initiativeText);
     
     var hp = creature['hp'];
     var maxHp = creature['maxHp'];
     var hpText = document.createTextNode(hp + '/' + maxHp);
     var hpCell = document.createElement('td');
+    hpCell.setAttribute('class', 'numberCell');
     hpCell.appendChild(hpText);
     
     var hpPercent = calc.permilDivision(hp, maxHp);
     var hpPercentText = document.createTextNode(hpPercent);
     var hpPercentCell = document.createElement('td');
+    hpPercentCell.setAttribute('class', 'numberCell');
     hpPercentCell.appendChild(hpPercentText);
 
     var button = document.createElement('input');
@@ -128,6 +135,7 @@ function createRow(creature) {
     var deleteClicked = getDeleteClicked(creatureId);
     button.addEventListener('click', deleteClicked);
     var buttonCell = document.createElement('td');
+    buttonCell.setAttribute('class', 'numberCell');
     buttonCell.appendChild(button);    
 
     var row = document.createElement('tr');
@@ -222,7 +230,6 @@ function createUi(creatures) {
         } else {
           testRow.setAttribute('class', 'notSelectedRow');
         }
-        
         table.appendChild(testRow);
     }
     var addUi = createAddUi();
