@@ -8,13 +8,14 @@ var charWidth = 7;
 function init() {
   console.log(input);
   input.addEventListener('keydown', keypress);
-  input.addEventListener('overflow', expandInputArea);
+  //input.addEventListener('overflow', expandInputArea);
   /*
   var mainInput = document.getElementById('mainInput');
   mainInput.addEventListener('keydown', keypress);
   */
   initWindow();
   declareFontSize();
+  input.focus();
 }
 
 function declareFontSize() {
@@ -22,7 +23,7 @@ function declareFontSize() {
   var height = testSpan.offsetHeight;
   var width = testSpan.offsetWidth/3;
   charWidth = width;
-  printText("Char dimensions: " + height + "x" + width);
+  printText("Char dimensions: " + height + "x" + width, 'output');
 }
 
 function RecentCommandIterator() {
@@ -69,7 +70,7 @@ function keypress(event) {
       refreshInputArea();
       printText(inputText, 'input');
       var outputText = send(inputText);
-      printText(outputText, 'output');
+      printLineBreakText(outputText, 'output');
     }
     //var div = document.getElementById('textWindow');
     var div = document.getElementById('textField');
@@ -142,6 +143,13 @@ function printText(text, direction) {
     printLine(lineToPrint, direction);
   }
   printLine(toPrint, direction);
+}
+
+function printLineBreakText(text, direction) {
+  var toPrint = text.split("\n");
+  for (var i in toPrint) {
+    printLine(toPrint[i], direction);
+  }
 }
 
 function printLine(line, direction) {

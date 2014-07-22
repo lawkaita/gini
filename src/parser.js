@@ -27,26 +27,20 @@ function addCreatureCommand(params) {
   var name = params[0];
   var initiativeToBeResolved = params[1];
   var initiative = runParsed(initiativeToBeResolved);
-  
   var hpToBeResolved = params[2];
   var hp = runParsed(hpToBeResolved);
-  
   var feedback = addCreature(name, initiative, hp);
-  
   updateUi();
   return feedback;
-  
 }
 
 function lastIndexOf(string, char) {
   lastIndex = undefined;
-  
   for (var i in string){
     if (string[i] === char) {
       lastIndex = i;
     }
   }
-  
   return parseInt(lastIndex);
 }
 
@@ -103,11 +97,16 @@ function healCommand(params) {
 
 function clearEncounterCommand() {
   database = [];
+  clock = new Clock();
   updateUi();
   
+  return success;
+}
+
+function clearConsoleCommand() {
   var fromWhereToClear = document.getElementById('textField');
   var toClear = document.getElementById('textRows');
-  var toAdd = document.createElement('table');
+  var toAdd = document.createElement('div');
   toAdd.setAttribute('id', 'textRows');
   
   fromWhereToClear.replaceChild(toAdd, toClear);
