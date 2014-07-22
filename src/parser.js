@@ -70,7 +70,7 @@ function removeCreatureCommand(params) {
 
 function changeInitiativeCommand(params) {
   var name = params[0];
-  var initiativeToBeResloved = params[1];
+  var initiativeToBeResolved = params[1];
   var initiative = runParsed(initiativeToBeResolved);
   
   var feedback = changeCreatureInitiativeByName(name, initiative);
