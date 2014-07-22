@@ -99,6 +99,7 @@ function clearEncounterCommand() {
   database = [];
   clock = new Clock();
   updateUi();
+  initiativeIndex = undefined;
   
   return success;
 }

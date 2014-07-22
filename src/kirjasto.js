@@ -1,16 +1,12 @@
 var database = [];
-
 var initiativeIndex;
-
 var nextCreatureId = 0;
-
 var success = "[OK]"
 
 function addCreature(name, initiative, hp) {
     var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
     database.push(creature);
     nextCreatureId++;
-    
     return success;
 }
 
