@@ -8,6 +8,8 @@ var charWidth = 7;
 function init() {
   console.log(input);
   input.addEventListener('keydown', keypress);
+  var textField = document.querySelector('#textField');
+  textField.addEventListener('click', inputFocus);
   //input.addEventListener('overflow', expandInputArea);
   /*
   var mainInput = document.getElementById('mainInput');
@@ -24,6 +26,10 @@ function declareFontSize() {
   var width = testSpan.offsetWidth/3;
   charWidth = width;
   printText("Char dimensions: " + height + "x" + width, 'output');
+}
+
+function inputFocus() {
+  input.focus();
 }
 
 function RecentCommandIterator() {
