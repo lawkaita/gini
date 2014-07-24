@@ -22,6 +22,7 @@ Calculator.prototype.throwDice = function(timesToThrow, diceSize) {
     resultSum = resultSum + result;
   }
   
+  sout(timesToThrow + "d" + diceSize + " gives " + resultSum);
   return resultSum;
 }
 
