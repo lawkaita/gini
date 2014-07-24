@@ -103,7 +103,7 @@ function refreshInputArea() {
   input.rows = 1;
 }
 
-function addNewInputArea() {
+function addNewInputArea_dec() {
   input = document.createElement('textarea');
   input.setAttribute('id', 'inputArea');
   input.setAttribute('placeholder', 'command');
@@ -116,14 +116,14 @@ function addNewInputArea() {
   input.focus();
 }
 
-function printInput() {
+function printInput_dec() {
   var textRows = document.querySelector('#textRows');
   input.disabled = true;
   input.setAttribute('id','oldInputArea');
   textRows.appendChild(input);
 }
 
-function printOutput(string) {
+function printOutput_old2(string) {
   var textRows = document.querySelector('#textRows');
   outputArea = document.createElement('textarea');
   outputArea.setAttribute('id', 'outputArea');
@@ -156,6 +156,10 @@ function printLineBreakText(text, direction) {
   for (var i in toPrint) {
     printLine(toPrint[i], direction);
   }
+}
+
+function sout(line) {
+  printLineBreakText(line, 'output');
 }
 
 function printLine(line, direction) {
