@@ -5,20 +5,24 @@ var success = "[OK]";
 var fail = "[FAIL]";
 
 function addCreature(name, initiative, hp) {
-    var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
-    database.push(creature);
-    nextCreatureId++;
-    return success;
+  if (creatureWithNameExists(name)) {
+    return fail;
+  }
+  
+  var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
+  database.push(creature);
+  nextCreatureId++;
+  return success;
 }
 
 function initWindow() {
-    addCreature('Aboleth', 12, 100);
-    addCreature('uthal', 5, 6);
-    addCreature('kobold123', 36, 77);
+  addCreature('Aboleth', 12, 100);
+  addCreature('uthal', 5, 6);
+  addCreature('kobold123', 36, 77);
 
-    var foo = document.querySelector("#creaturesWindow");
-    var text = createUi(database);
-    foo.appendChild(text);
+  var foo = document.querySelector("#creaturesWindow");
+  var text = createUi(database);
+  foo.appendChild(text);
 }
 
 function nextInitiativeIndex() {
@@ -64,6 +68,9 @@ function changeCreatureInitiativeByName(name, initiative) {
 
 function damageCreatureByName(name, dmg) {
   var index = getCreatureIndex(name, 'name');
+  if (index === undefined) {
+    return fail;
+  }
   var creature = database[index];
   creature.hp = creature.hp - dmg;
   updateUi();
