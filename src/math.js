@@ -19,10 +19,9 @@ Calculator.prototype.throwDice = function(timesToThrow, diceSize) {
   
   for (var i = 1; i <= timesToThrow; i++) {
     var result = this.getRandomInt(1, diceSize);
+    soutMath("#" + i + " " + "d" + diceSize + " gives " + result);
     resultSum = resultSum + result;
   }
-  
-  sout(timesToThrow + "d" + diceSize + " gives " + resultSum);
   return resultSum;
 }
 

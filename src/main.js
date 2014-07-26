@@ -202,6 +202,10 @@ function sout(line) {
   printLineBreakText(line, 'soutRow');
 }
 
+function soutMath(line) {
+  printText(line, 'mathRow');
+}
+
 function printLine(line, rowClass) {
   var textRows = document.querySelector('#textRows');
   var div =  document.createElement('div');
