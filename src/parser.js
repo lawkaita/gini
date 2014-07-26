@@ -664,6 +664,15 @@ function runCommandString(userInput) {
     }
     return msgToReturn;
   }
+  
+  if(typeof(result) === 'string') {
+    var msgToReturn = {
+      text: result,
+      rowClass: 'soutRow'
+    }
+    return msgToReturn;
+  }
+  
   return result;
 }
 

@@ -101,7 +101,7 @@ function printOutputmsgs(outputmsgs) {
   var text = opened['text'];
   var rowClass = opened['rowClass'];
   var output = label + text;
-  printText(output, rowClass);
+  printLineBreakText(output, rowClass);
 }
 
 function openMsg(msg) {
