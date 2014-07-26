@@ -23,6 +23,14 @@ function addCreature(name, initiative, hp) {
     return msg;
   }
   
+  if(hp === 0) {
+    var msg = {
+      label: fail,
+      text: "hp cannot be zero",
+      rowClass: 'error',
+    }
+  }
+  
   var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
   database.push(creature);
   nextCreatureId++;
