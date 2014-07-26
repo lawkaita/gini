@@ -1,7 +1,8 @@
 var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
 var alphaNumericCharacterRegex = /\b\w\b/;
 var syntaxErrorMsg = {
-  label: "[SYNTAX ERROR]"
+  label: "[SYNTAX ERROR]",
+  rowClass: 'syntaxError'
 }
 var verbs = {
   "add": addCreatureCommand, 
