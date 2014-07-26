@@ -4,18 +4,21 @@ var nextCreatureId = 0;
 var ok = "[OK]";
 var fail = "[FAIL]";
 var okmsg = {
-  label: ok
+  label: ok,
+  rowClass: 'soutRow'
 }
 var noCreatureWithNameMsg = {
   label: fail,
-  reason: "no creature with such name"
+  text: "no creature with such name",
+  rowClass: 'error'
 }
 
 function addCreature(name, initiative, hp) {
   if (creatureWithNameExists(name)) {
     var msg = {
       label: fail,
-      reason: "creature with name exists"
+      text: "creature with name exists",
+      rowClass: 'error'
     }
     return msg;
   }
@@ -222,16 +225,13 @@ function createAddUi() {
 function byInitiative(creature1, creature2) {
     var initiative1 = creature1['inikka'];
     var initiative2 = creature2['inikka'];
-
     console.assert(!isNaN(initiative1) && !isNaN(initiative2));
-
     return 1 * (initiative2 - initiative1);
 }
 
 function sortByInitiative(creatures) {
     var newList = creatures.slice();
     newList.sort(byInitiative);
-
     return newList;
 }
 
@@ -264,16 +264,13 @@ function updateUi() {
 
 function creatureWithNameExists(nameToSearch) {
   var exists = false;
-  
   for (i = 0; i < database.length; i++) {
     var creature = database[i];
     var name = creature['name'];
-    
     if(name === nameToSearch) {
       exists = true;
     }
   }
-  
   return exists;
 }
 

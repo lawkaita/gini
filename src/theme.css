@@ -185,6 +185,26 @@ h1 {
   padding: 0;
 }
 
+.syntaxError {
+  color: orange;
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+.error {
+  color: red;
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+.mathRow {
+  color: green;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
 #fontSizeTest {
   color: black;
   background-color: gray;

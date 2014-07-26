@@ -96,13 +96,34 @@ function processInput(inputText) {
 }
 
 function printOutputmsgs(outputmsgs) {
-  var label = outputmsgs['label'];
-  var reason = outputmsgs['reason'];
-  var output = label + ": " + reason;
-  if (reason === undefined) {
-    output = label;
+  var opened = openMsg(outputmsgs);
+  var label = opened['label'];
+  var text = opened['text'];
+  var rowClass = opened['rowClass'];
+  var output = label + text;
+  printText(output, rowClass);
+}
+
+function openMsg(msg) {
+  var paramNames = ['label', 'text', 'rowClass',];
+  var opened = {
+    label: '',
+    text: '',
+    rowClass: 'soutRow'
   }
-  printText(output, 'soutRow');
+  
+  for (var i in paramNames) {
+    var paramName = paramNames[i];
+    if (msg[paramName] !== undefined) {
+      opened[paramName] = msg[paramName];
+    }
+  }
+  
+  if((opened['label'] !== '') && (opened['text'] !== '')) {
+    opened['label'] = opened['label'] + ': ';
+  }
+  
+  return opened;
 }
 
 function countAndExpandInputArea() {

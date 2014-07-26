@@ -657,18 +657,18 @@ function runCommandString(userInput) {
   
   if(isNumber(result)) {
     calc.setAns(result);
-    result = " = " + result;
+    var msgToReturn = {
+      text: " = " + result,
+      rowClass: 'mathRow'
+    }
+    return msgToReturn;
   }
-  
-  var msgToReturn = {
-    label: result
-  }
-  return msgToReturn;
+  return result;
 }
 
 function runParsed(parsed) {
   if (parsed === undefined) {
-    return syntaxErrorMSg;
+    return syntaxErrorMsg;
   }
   var commandName = parsed['command'];
   var command = verbs[commandName];
