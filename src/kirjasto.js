@@ -1,18 +1,29 @@
 var database = [];
 var initiativeIndex;
 var nextCreatureId = 0;
-var success = "[OK]";
+var ok = "[OK]";
 var fail = "[FAIL]";
+var okmsg = {
+  label: ok
+}
+var noCreatureWithNameMsg = {
+  label: fail,
+  reason: "no creature with such name"
+}
 
 function addCreature(name, initiative, hp) {
   if (creatureWithNameExists(name)) {
-    return fail;
+    var msg = {
+      label: fail,
+      reason: "creature with name exists"
+    }
+    return msg;
   }
   
   var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
   database.push(creature);
   nextCreatureId++;
-  return success;
+  return okmsg;
 }
 
 function initWindow() {
@@ -51,30 +62,30 @@ function deleteCreatureByName(name) {
   if(index !== undefined) {
     deleteCreatureFromIndex(index);
     updateUi();
-    return success;
+    return okmsg;
   }
-  return fail;
+  return noCreatureWithNameMsg;
 }
 
 function changeCreatureInitiativeByName(name, initiative) {
   var index = getCreatureIndex(name, 'name');
   if (index === undefined) {
-    return fail;
+    return noCreatureWithNameMsg;
   }
   database[index].inikka = initiative;
   updateUi();
-  return success;
+  return okmsg;
 }
 
 function damageCreatureByName(name, dmg) {
   var index = getCreatureIndex(name, 'name');
   if (index === undefined) {
-    return fail;
+    return noCreatureWithNameMsg;
   }
   var creature = database[index];
   creature.hp = creature.hp - dmg;
   updateUi();
-  return success;
+  return okmsg;
 }
 
 function getCreatureIndex(attribute, attributeName) {

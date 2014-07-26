@@ -1,6 +1,8 @@
 var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
 var alphaNumericCharacterRegex = /\b\w\b/;
-
+var syntaxErrorMsg = {
+  label: "[SYNTAX ERROR]"
+}
 var verbs = {
   "add": addCreatureCommand, 
   "remove": removeCreatureCommand, 
@@ -50,21 +52,18 @@ function firstIndexOf(string, chars) {
       return i;
     }
   }
-  
   return -1;
 }
 
 function splitAtIndex(string, index) {
   var first = string.slice(0, index);
   var second = string.slice(index + 1);
-  
   return [first, second];
 }
 
 function removeCreatureCommand(params) {
   var name = params[0];
   var feedback = deleteCreatureByName(name);
-  
   return feedback;
 }
 
@@ -72,7 +71,6 @@ function changeInitiativeCommand(params) {
   var name = params[0];
   var initiativeToBeResolved = params[1];
   var initiative = runParsed(initiativeToBeResolved);
-  
   var feedback = changeCreatureInitiativeByName(name, initiative);
   return feedback;
 }
@@ -81,7 +79,6 @@ function dealDamageCommand(params) {
   var name = params[0];
   var dmgToBeResolved = params[1];
   var damage = runParsed(dmgToBeResolved);
-  
   var feedback = damageCreatureByName(name, damage);
   return feedback;
 }
@@ -90,14 +87,12 @@ function healCommand(params) {
   var name = params[0];
   var dmgToBeResolved = params[1];
   var damage = 0 - runParsed(dmgToBeResolved);
-  
   var feedback = damageCreatureByName(name, damage);
   return feedback;
 }
 
 function clearCommand(params) {
   var param = params[0];
-  
   if(param === undefined) {
     return clearEncounterCommand();
   } else if (param === 'console') {
@@ -110,8 +105,7 @@ function clearEncounterCommand() {
   clock = new Clock();
   updateUi();
   initiativeIndex = undefined;
-  
-  return success;
+  return okmsg;
 }
 
 function clearConsoleCommand() {
@@ -119,10 +113,8 @@ function clearConsoleCommand() {
   var toClear = document.getElementById('textRows');
   var toAdd = document.createElement('div');
   toAdd.setAttribute('id', 'textRows');
-  
   fromWhereToClear.replaceChild(toAdd, toClear);
-  
-  return success;
+  return okmsg;
 }
 
 var printHelpCommand;
@@ -133,10 +125,8 @@ function nextCommand() {
   if(!clock.isOn) {
     clock.start();
   }
-  
   nextInitiativeIndex();
   updateUi();
-  
   var toReturn = clock.outWrite();
   clock.turnPassed();
   return toReturn;
@@ -154,17 +144,14 @@ function sumCommand(params) {
 function minusCommand(params) {
   var toMinusToBeResolved = params[0];
   var toMinus = runParsed(toMinusToBeResolved);
-  
   return (-1)*toMinus;
 }
 
 function throwDiceCommand(params) {
   var timesToBeResolved = params[0];
   var diceSizeToBeResolved = params[1];
-  
   var times = runParsed(timesToBeResolved);
   var diceSize = runParsed(diceSizeToBeResolved);
-  
   return calc.throwDice(times, diceSize);
 }
 
@@ -174,15 +161,12 @@ function ansCommand() {
 
 function parse(command) {
   var parsed;
-
   if (isSentence(command)) {
     parsed = parseSentence(command);
   }
-  
   if (isMath(command)) {
     parsed = parseMath(command);
   }
-  
   return parsed;
 }
 
@@ -198,7 +182,6 @@ function isSumAndOnlySum(command) {
   if (isMathNotSum(command)) {
     return false;
   }
-  
   var summands = splitToSummands(command);
   return areSummamble(summands);
 }
@@ -207,41 +190,33 @@ function addPlusBeforeMinus(command) {
   if (command[0] === "-") {
     command = "0 " + command;
   }
-  
   readpoint = 0;
   while(readpoint < command.length) {
     symbolAtPoint = command[readpoint];
     if (symbolAtPoint === "-") {
       parts = splitAtIndex(command, readpoint);
       var toAppend = "+ -";
-      
       command = parts[0] + toAppend + parts[1];
-      
       readpoint++;
       readpoint++;
     }
-    
     readpoint++;
   }
-  
   return command;
 }
 
 function splitToSummands(command) {
   var toProcess = addPlusBeforeMinus(command);
   var summands = toProcess.split('+');
-  
   for (var i = 0; i < summands.length; i++) {
     var trimmed = summands[i].trim();
     summands[i] = trimmed;
   }
-  
   return summands;
 }
 
 function areSummamble(summands) {
   var isTrue = true;
-  
   for(var i = 0; i < summands.length; i++) {
     var supposedMathString = summands[i];
     
@@ -249,7 +224,6 @@ function areSummamble(summands) {
       isTrue = false;
     }
   }
-  
   return isTrue;
 }
 
@@ -633,45 +607,36 @@ function isSumLike(string) {
   if ((scannedLength >= 1) && (startIndexInclusive === 0) && (endIndexExclusive === string.length)) {
     return true;
   }
-  
   return false;
-  
 }
 
 function splitByWhitespaceOnceIfContainsWhiteSpace(string) {
   if (!(typeof(string) === "string")) {
     return undefined;
   }
-  
   var parts = string.split(" ");
   var first = parts[0];
   var restParts = parts.slice(1);
   var rest = restParts.join(" ");
-  
   if(isBlank(rest)) {
     return [first];
   }
-  
   return [first, rest];
 }
 
-/*
-function interpretSentence(params) {
+function interpretSentence_old(params) {
   var verb = verbs[params[0]];
   var restOfParams = params.slice(1);
   verb(restOfParams);
 }
-*/
 
 function arrayContainsObject(array, object) {
   var contains = false;
-  
   for (var index = 0; index < array.length; index++) {
     if (array[index] === object) {
       contains = true;
     }
   }
-  
   return contains;
 }
 
@@ -681,34 +646,33 @@ function objectContainsKey(object, key) {
 
 function runCommandString(userInput) {
   var parsed = parse(userInput);
-  
   if (parsed === undefined) {
-    return "[SYNTAX ERROR]";
+    return syntaxErrorMsg;
   }
   
   var commandName = parsed['command'];
   var commandToRun = verbs[commandName];
   var params = parsed['params'];
-  
   var result = commandToRun(params);
   
   if(isNumber(result)) {
     calc.setAns(result);
-    return " = " + result;
+    result = " = " + result;
   }
   
-  return result;
+  var msgToReturn = {
+    label: result
+  }
+  return msgToReturn;
 }
 
 function runParsed(parsed) {
   if (parsed === undefined) {
-    return "[SYNTAX ERROR]";
+    return syntaxErrorMSg;
   }
-  
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];
-  
   return command(params);
 }
 

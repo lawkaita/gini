@@ -25,7 +25,7 @@ function declareFontSize() {
   var height = testSpan.offsetHeight;
   var width = testSpan.offsetWidth/3;
   charWidth = width;
-  printText("Char dimensions: " + height + "x" + width, 'output');
+  printText("Char dimensions: " + height + "x" + width, 'soutRow');
 }
 
 function inputFocus() {
@@ -73,10 +73,7 @@ function keypress(event) {
     rci = new RecentCommandIterator();
     var inputText = input.value;
     if(inputText !== "") {
-      refreshInputArea();
-      printText(inputText, 'input');
-      var outputText = send(inputText);
-      printLineBreakText(outputText, 'output');
+      processInput(inputText);
     }
     //var div = document.getElementById('textWindow');
     var div = document.getElementById('textField');
@@ -84,6 +81,28 @@ function keypress(event) {
   } else {
     countAndExpandInputArea();
   }
+}
+
+function processInput(inputText) {
+  refreshInputArea();
+  printText(inputText, 'inputRow');
+  var outputmsgs = send(inputText);
+  var label = outputmsgs['label'];
+  if (label !== "[SYNTAX ERROR]") {
+    recentCommands.push(inputText);
+    rci.index++;
+  }
+  printOutputmsgs(outputmsgs);
+}
+
+function printOutputmsgs(outputmsgs) {
+  var label = outputmsgs['label'];
+  var reason = outputmsgs['reason'];
+  var output = label + ": " + reason;
+  if (reason === undefined) {
+    output = label;
+  }
+  printText(output, 'soutRow');
 }
 
 function countAndExpandInputArea() {
@@ -136,42 +155,42 @@ function printOutput_old2(string) {
 
 function countLineLengthInChars(div) {
   var lineLengthInPX = div.offsetWidth;
-  return Math.floor(parseInt(lineLengthInPX)/charWidth) - 1;
+  return Math.floor(parseInt(lineLengthInPX/charWidth)) - 1;
 }
 
-function printText(text, direction) {
+function printText(text, rowClass) {
   var toPrint = text;
   var textRows = document.querySelector('#textRows');
   var lineLengthInChars = countLineLengthInChars(textRows);
   while(toPrint.length > lineLengthInChars) {
     var lineToPrint = toPrint.slice(0, lineLengthInChars);
     toPrint = toPrint.slice(lineLengthInChars);
-    printLine(lineToPrint, direction);
+    printLine(lineToPrint, rowClass);
   }
-  printLine(toPrint, direction);
+  printLine(toPrint, rowClass);
 }
 
-function printLineBreakText(text, direction) {
+function printLineBreakText(text, rowClass) {
   var toPrint = text.split("\n");
   for (var i in toPrint) {
-    printLine(toPrint[i], direction);
+    printLine(toPrint[i], rowClass);
   }
 }
 
 function sout(line) {
-  printLineBreakText(line, 'output');
+  printLineBreakText(line, 'soutRow');
 }
 
-function printLine(line, direction) {
+function printLine(line, rowClass) {
   var textRows = document.querySelector('#textRows');
   var div =  document.createElement('div');
-  var divClass = 'textRow';
-  if (direction === 'input') {
-    divClass = 'inputRow';
+  var divClass;
+  if (rowClass === undefined) {
+    divClass = 'textRow';
+  } else {
+    divClass = rowClass;
   }
-  if (direction === 'output') {
-    divClass = 'soutRow';
-  }
+  
   div.setAttribute('class', divClass);
   //var width = textRows.offsetWidth;
   //div.setAttribute('style', 'width:' + (width - 3) + "px");
@@ -189,10 +208,6 @@ function printOutput_old(row, output) {
 
 function send(inputText) {
   var output = runCommandString(inputText);
-  if (output !== "[SYNTAX ERROR]") {
-    recentCommands.push(inputText);
-    rci.index++;
-  }
   return output;
 }
 
