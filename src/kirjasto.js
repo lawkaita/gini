@@ -43,6 +43,50 @@ function initWindow() {
   addCreature('kobold123', 36, 77);
 
   var foo = document.querySelector("#creaturesWindow");
+  
+  var bar = document.createElement('tr');
+  bar.setAttribute('class', 'creatureTableColumnNames');
+  
+  var baz = document.createElement('table');
+  baz.setAttribute('class', 'tcnr');
+  
+  var nameCell = document.createElement('td');
+  var nameText = document.createTextNode('name');
+  var nameDiv = document.createElement('div');
+  nameDiv.appendChild(nameText);
+  nameDiv.setAttribute('style', 'max-width: 140px');
+  nameCell.setAttribute('class', 'nameColumn');
+  nameCell.appendChild(nameDiv);
+  
+  var initCell = document.createElement('td');
+  var initText = document.createTextNode('init');
+  initCell.setAttribute('class', 'numberColumn');
+  initCell.appendChild(initText);
+  
+  var hpCell = document.createElement('td');
+  var hpText = document.createTextNode('hp / max hp');
+  hpCell.setAttribute('class', 'numberColumn');
+  hpCell.appendChild(hpText);
+  
+  var hpPerCell = document.createElement('td');
+  var hpPerText = document.createTextNode('hp %');
+  hpPerCell.setAttribute('class', 'numberColumn');
+  hpPerCell.appendChild(hpPerText);
+  
+  var addRemoveCell = document.createElement('td');
+  var addRemoveText = document.createTextNode('add or remove');
+  addRemoveCell.setAttribute('class', 'numberColumn');
+  addRemoveCell.appendChild(addRemoveText);
+  
+  bar.appendChild(nameCell);
+  bar.appendChild(initCell);
+  bar.appendChild(hpCell);
+  bar.appendChild(hpPerCell);
+  bar.appendChild(addRemoveCell);
+  
+  baz.appendChild(bar);
+  foo.appendChild(baz);
+  
   var text = createUi(database);
   foo.appendChild(text);
 }

@@ -32,6 +32,28 @@ h1 {
 .notSelectedRow {
   
 }
+.creatureTableColumnNames {
+  background-color: #595959;
+  width: 100%;
+  color:gray;
+  font-family: consolas, monospace;
+  font-size: 12px;
+}
+
+.nameColumn {
+  width: 25%;
+  max-width: 60%;
+  overflow: hidden;
+}
+
+.numberColumn {
+  width: 10%;
+  max-width: 10%;
+}
+
+.tcnr {
+  width: 100%;
+}
 
 #name {
   width: 100%;
@@ -47,7 +69,7 @@ h1 {
 
 .nameCell {
   width: 25%;
-  max-width: 60%
+  max-width: 60%;
   overflow: hidden;
 }
 
