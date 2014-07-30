@@ -122,6 +122,8 @@ h1 {
   max-width: 100%;
   */
   min-width: 100%;
+
+  white-space: pre-wrap;
   /*
   max-height: 300px;
   overflow: auto;
@@ -253,6 +255,7 @@ h1 {
   
   overflow: auto;
   height: 300px;
+
   /*
   max-height: 300px;
   */
