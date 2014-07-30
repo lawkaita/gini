@@ -35,12 +35,13 @@ h1 {
 .creatureTableColumnNames {
   background-color: #595959;
   width: 100%;
-  color:gray;
+  color: gray;
   font-family: consolas, monospace;
   font-size: 12px;
 }
 
 .nameColumn {
+  //background-color: red;
   width: 25%;
   max-width: 60%;
   overflow: hidden;
@@ -51,8 +52,9 @@ h1 {
   max-width: 10%;
 }
 
-.tcnr {
+.columnNamesRow {
   width: 100%;
+  border-spacing: 0;
 }
 
 #name {

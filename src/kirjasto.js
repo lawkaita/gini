@@ -48,8 +48,8 @@ function initWindow() {
   bar.setAttribute('class', 'creatureTableColumnNames');
   
   var baz = document.createElement('table');
-  baz.setAttribute('class', 'tcnr');
-  
+  baz.setAttribute('class', 'columnNamesRow');
+
   var nameCell = document.createElement('td');
   var nameText = document.createTextNode('name');
   var nameDiv = document.createElement('div');
@@ -64,7 +64,7 @@ function initWindow() {
   initCell.appendChild(initText);
   
   var hpCell = document.createElement('td');
-  var hpText = document.createTextNode('hp / max hp');
+  var hpText = document.createTextNode('hp/maxHp');
   hpCell.setAttribute('class', 'numberColumn');
   hpCell.appendChild(hpText);
   
@@ -74,7 +74,7 @@ function initWindow() {
   hpPerCell.appendChild(hpPerText);
   
   var addRemoveCell = document.createElement('td');
-  var addRemoveText = document.createTextNode('add or remove');
+  var addRemoveText = document.createTextNode('add/remove');
   addRemoveCell.setAttribute('class', 'numberColumn');
   addRemoveCell.appendChild(addRemoveText);
   
