@@ -659,7 +659,7 @@ function runCommandString(userInput) {
   if(isNumber(result)) {
     calc.setAns(result);
     var msgToReturn = {
-      text: " = " + result,
+      text: "    = " + result,
       rowClass: 'mathRow'
     }
     return msgToReturn;

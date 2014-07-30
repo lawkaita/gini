@@ -203,7 +203,7 @@ function sout(line) {
 }
 
 function soutMath(line) {
-  printText(line, 'mathRow');
+  printText("    " + line, 'mathRow');
 }
 
 function printLine(line, rowClass) {
