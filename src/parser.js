@@ -25,6 +25,30 @@ var verbs = {
   "number": returnAsNumber,
   "ans": ansCommand
 };
+var syntaxList = {
+  "add": function(params) {
+    var name = params[0];
+    var initiative = params[1];
+    var hp = params[2];
+    if (typeof(name) !== "string") {
+      return false;
+    }
+    if (!wasParsedAsMath(initiative)) {
+      return false;
+    }
+    if (!wasParsedAsMath(hp)) {
+      return false;
+    }
+
+    return true;
+  }
+};
+
+function wasParsedAsMath(object) {
+  var booleanArray = (["number","dice","sum","minus"].map(
+        function(x) {return object.command === x}));
+  return arrayContainsObject(booleanArray, true);
+}
 
 function addCreatureCommand(params) {
   var name = params[0];
@@ -359,7 +383,7 @@ function parseDice(command) {
   var parsed = {
     command: "dice",
     params: parsedParts
-  }
+  };
   
   return parsed;
 }
@@ -371,7 +395,7 @@ function parseMinus(command) {
   var parsed = {
     command: "minus",
     params: [toMinusParsed]
-  }
+  };
   
   return parsed;
 }
@@ -380,7 +404,7 @@ function parseNumber(command) {
   var parsed = {
     command: "number",
     params: command
-  }
+  };
   
   return parsed;
 }
@@ -389,7 +413,7 @@ function parseAns(command) {
   var parsed = {
     command: "ans",
     params: []
-  }
+  };
   
   return parsed;
 }
@@ -421,7 +445,7 @@ function parseAdd(splitted) {
   var parsed = {
     command: verb,
     params: [name, parseMath(initiativeString), parseMath(hpString)]
-  }
+  };
   
   return parsed;  
 }
@@ -430,7 +454,7 @@ function parseOneWordSentence(commandString) {
   var parsed = {
     command: commandString,
     params: []
-  }
+  };
   
   return parsed;
 }
@@ -463,7 +487,7 @@ function parseSentence_old(command) {
   var parsed = {
     command: verb,
     params: restToMathIfMath
-  }
+  };
   
   return parsed;
 }
@@ -504,7 +528,7 @@ function parseSentence(command) {
   var parsed = {
     command: verb,
     params: paramArray
-  }
+  };
   
   return parsed;
 }
@@ -656,6 +680,16 @@ function objectContainsKey(object, key) {
   return !(typeof(object[key]) === typeof(undefined));
 }
 
+function checkParamsLegality(commandName, params) {
+  var syntaxCheckFunction = syntaxList[commandName];
+  
+  if(syntaxCheckFunction === undefined) {
+    return true;
+  }
+
+  return syntaxCheckFunction(params);  
+}
+
 function runCommandString(userInput) {
   var parsed = parse(userInput);
   if (parsed === undefined) {
@@ -665,6 +699,12 @@ function runCommandString(userInput) {
   var commandName = parsed['command'];
   var commandToRun = verbs[commandName];
   var params = parsed['params'];
+  var paramsAreLegal = checkParamsLegality(commandName, params);
+  
+  if (!paramsAreLegal) {
+    return syntaxErrorMsg;
+  }
+
   var result = commandToRun(params);
   
   if(isNumber(result)) {
