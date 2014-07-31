@@ -41,8 +41,25 @@ var syntaxList = {
     }
 
     return true;
-  }
+  },
+  "init": function(params) { return nameMathCheck(params) },
+  "dmg": function(params) { return nameMathCheck(params) },
+  "harm": function(params) { return nameMathCheck(params) },
+  "hurt": function(params) { return nameMathCheck(params) },
+  "heal": function(params) { return nameMathCheck(params) }
 };
+
+function nameMathCheck(params) {
+  var name = params[0];
+  var math = params[1];
+  if (typeof(name) !== "string") {
+    return false;
+  }
+  if (!wasParsedAsMath(math)) {
+    return false;
+  }
+  return true;
+}
 
 function wasParsedAsMath(object) {
   if (object === undefined) {
@@ -157,7 +174,7 @@ function remarkCommand(params) {
 function unremarkCommand(params) {
   var name = params[0];
   var feedback = unremarkCreature(name);
-  return feedbacK;
+  return feedback;
 }
 
 function nextCommand() {
