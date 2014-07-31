@@ -160,6 +160,17 @@ function remarkCreature(name, remark) {
   return okmsg;
 }
 
+function unremarkCreature(name) {
+  var index = getCreatureIndex(name, 'name');
+  if (index === undefined) {
+    return noCreatureWithNameMsg;
+  }
+  var creature = database[index];
+  creature.remarks = [];
+  updateUi();
+  return okmsg;
+}
+
 function getCreatureIndex(attribute, attributeName) {
     for(var i in database) {
         var creature = database[i];

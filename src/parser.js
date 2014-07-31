@@ -15,7 +15,7 @@ var verbs = {
   "clear": clearCommand, 
   "help": printHelpCommand, 
   "remark": remarkCommand,
-  "uncomment": uncommentCreatureCommand,
+  "unremark": unremarkCommand,
   "next": nextCommand,
   
   //math
@@ -119,14 +119,18 @@ function clearConsoleCommand() {
 }
 
 var printHelpCommand;
-var commentCreatureCommand;
-var uncommentCreatureCommand;
 
 function remarkCommand(params) {
   var name = params[0];
   var remark = params[1];
   var feedback = remarkCreature(name, remark);
   return feedback;
+}
+
+function unremarkCommand(params) {
+  var name = params[0];
+  var feedback = unremarkCreature(name);
+  return feedbacK;
 }
 
 function nextCommand() {
