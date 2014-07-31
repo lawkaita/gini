@@ -45,6 +45,9 @@ var syntaxList = {
 };
 
 function wasParsedAsMath(object) {
+  if (object === undefined) {
+    return false;
+  }
   var booleanArray = (["number","dice","sum","minus"].map(
         function(x) {return object.command === x}));
   return arrayContainsObject(booleanArray, true);
