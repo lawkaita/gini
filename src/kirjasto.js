@@ -31,7 +31,13 @@ function addCreature(name, initiative, hp) {
     }
   }
   
-  var creature = {id: nextCreatureId, name: name, inikka: initiative, hp: hp, maxHp: hp};
+  var creature = {
+	  id: nextCreatureId,
+	  name: name,
+	  inikka: initiative,
+	  hp: hp, 
+	  maxHp: hp,
+          remarks: []};
   database.push(creature);
   nextCreatureId++;
   return okmsg;
@@ -143,6 +149,17 @@ function damageCreatureByName(name, dmg) {
   return okmsg;
 }
 
+function remarkCreature(name, remark) {
+  var index = getCreatureIndex(name, 'name');
+  if (index === undefined) {
+    return noCreatureWithNameMsg;
+  }
+  var creature = database[index];
+  creature.remarks.push(remark);
+  updateUi();
+  return okmsg;
+}
+
 function getCreatureIndex(attribute, attributeName) {
     for(var i in database) {
         var creature = database[i];
@@ -172,6 +189,21 @@ function deleteCreatureFromIndex(index) {
   database.splice(parsed, 1);
 }
 
+function createRemarkSmall(remarks) {
+  var small = document.createElement('small');
+  var remarkStr = "";
+
+  for (var i = 0; i < remarks.length; i++) {
+    remarkStr = remarkStr + remarks[i] + ", ";
+  }
+
+  remarkStr = remarkStr.slice(0, remarkStr.length-2);
+  var textNode = document.createTextNode(remarkStr);
+
+  small.appendChild(textNode);
+  return small;
+}
+
 function createRow(creature) {    
     var name = creature['name'];
     var nameText = document.createTextNode(name);
@@ -179,6 +211,11 @@ function createRow(creature) {
     var nameDiv = document.createElement('div');
     nameDiv.setAttribute('class', 'nameDiv');
     nameDiv.appendChild(nameText);
+    var br = document.createElement('br');
+    nameDiv.appendChild(br);
+    var remarkStrSmall = createRemarkSmall(creature.remarks);
+    nameDiv.appendChild(remarkStrSmall);
+
     nameCell.setAttribute('class', 'nameCell');
     nameCell.appendChild(nameDiv);
 

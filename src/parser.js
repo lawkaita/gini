@@ -14,7 +14,7 @@ var verbs = {
   "heal": healCommand,
   "clear": clearCommand, 
   "help": printHelpCommand, 
-  "comment": commentCreatureCommand, 
+  "remark": remarkCommand,
   "uncomment": uncommentCreatureCommand,
   "next": nextCommand,
   
@@ -121,6 +121,13 @@ function clearConsoleCommand() {
 var printHelpCommand;
 var commentCreatureCommand;
 var uncommentCreatureCommand;
+
+function remarkCommand(params) {
+  var name = params[0];
+  var remark = params[1];
+  var feedback = remarkCreature(name, remark);
+  return feedback;
+}
 
 function nextCommand() {
   if(!clock.isOn) {
