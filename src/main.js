@@ -86,7 +86,8 @@ function keypress(event) {
 function processInput(inputText) {
   refreshInputArea();
   printText(inputText, 'inputRow');
-  var outputmsgs = send(inputText);
+  var outputmsgs = comAssigner.assign(inputText);
+  //var outputmsgs = send(inputText);
   var label = outputmsgs['label'];
   if (label !== "[SYNTAX ERROR]") {
     recentCommands.push(inputText);
