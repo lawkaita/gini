@@ -43,7 +43,6 @@ Clock.prototype.stop = function() {
   clearInterval(this.battery);
 }
 
-
 Clock.prototype.turnPassed = function() {
   this.turns++;
   this.turnSeconds = 0;

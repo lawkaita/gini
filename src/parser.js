@@ -3,7 +3,11 @@ var alphaNumericCharacterRegex = /\b\w\b/;
 var syntaxErrorMsg = {
   label: "[SYNTAX ERROR]",
   rowClass: 'syntaxError'
-}
+};
+var areYouSureMsg = {
+  text: "ARE YOU SURE? (y/n)",
+  rowClass: 'areYouSureRow'
+};
 var verbs = {
   "add": addCreatureCommand, 
   "remove": removeCreatureCommand, 
@@ -138,14 +142,41 @@ function healCommand(params) {
 
 function clearCommand(params) {
   var param = params[0];
-  if(param === undefined) {
-    return clearEncounterCommand();
-  } else if (param === 'console') {
+  if (param === undefined) {
+    //sout("clear what?");
+    //param = caputreInput();
+    var msgToReturn = {
+      text: "clear what?"
+    };
+    initiateCBD("clear");
+    return msgToReturn;
+  }
+
+  if(param === 'encounter') {
+    return clearEncounterCommand(params[1]);
+  } 
+  
+  if (param === 'console') {
     return clearConsoleCommand();
   }
+
+  return syntaxErrorMsg;
 }
 
-function clearEncounterCommand() {
+function clearEncounterCommand(sure) {
+  if (sure === 'n') {
+    var emptyMsg = {
+      label: ''
+    };
+    comAssigner.reset();
+    return emptyMsg;
+  }
+  
+  if (sure !== 'y') {
+    initiateCBD("clear encounter");
+    return areYouSureMsg;
+  }
+
   database = [];
   clock = new Clock();
   updateUi();
@@ -711,7 +742,18 @@ function checkParamsLegality(commandName, params) {
 }
 
 function runCommandString(userInput) {
-  var parsed = parse(userInput);
+  if (userInput === undefined) {
+    var undefinedMsg = {
+      label: '[FAIL]',
+      text: "undefined input",
+      rowClass: 'error'
+    };
+
+    return undefinedMsg;
+  }
+
+  var trimmed = userInput.trim();
+  var parsed = parse(trimmed);
   if (parsed === undefined) {
     return syntaxErrorMsg;
   }
