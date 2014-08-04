@@ -23,12 +23,13 @@ function addCreature(name, initiative, hp) {
     return msg;
   }
   
-  if(hp === 0) {
+  if(hp == 0) {
     var msg = {
       label: fail,
       text: "hp cannot be zero",
       rowClass: 'error',
     }
+    return msg;
   }
   
   var creature = {
