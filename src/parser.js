@@ -197,9 +197,18 @@ var printHelpCommand;
 
 function remarkCommand(params) {
   var name = params[0];
-  var remark = params[1];
+  var remarkStrs = params.slice(1, params.length);
+  var remark = collapseArrayToString(remarkStrs);
   var feedback = remarkCreature(name, remark);
   return feedback;
+}
+
+function collapseArrayToString(array) {
+  var str = array[0];
+  for(var i = 1; i < array.length; i++) {
+    str = str + " " + array[i];
+  }
+  return str;
 }
 
 function unremarkCommand(params) {
