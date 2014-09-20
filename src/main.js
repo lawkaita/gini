@@ -15,9 +15,14 @@ function init() {
   var mainInput = document.getElementById('mainInput');
   mainInput.addEventListener('keydown', keypress);
   */
+  loadSession();
   initWindow();
   declareFontSize();
   input.focus();
+}
+
+function loadSession() {
+  database = load();
 }
 
 function declareFontSize() {
@@ -94,6 +99,7 @@ function processInput(inputText) {
     rci.index++;
   }
   printOutputmsgs(outputmsgs);
+  save();
 }
 
 function printOutputmsgs(outputmsgs) {

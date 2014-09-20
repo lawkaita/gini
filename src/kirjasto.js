@@ -13,6 +13,28 @@ var noCreatureWithNameMsg = {
   rowClass: 'error'
 }
 
+//pysyv‰mm‰n tallennuksen lyhyt oppim‰‰r‰
+// tallentaminen
+function save() {
+  var asia = database;
+  var seivi = {};
+  seivi['asia'] = asia;
+  jsonSeivi = JSON.stringify(seivi);
+  localStorage.setItem('munSeivi', jsonSeivi);
+}
+// lataaminen
+function load() {
+  seiviJson = localStorage.getItem('munSeivi');
+  if (seiviJson === null) {
+    return [];
+  } else {
+    seivi = JSON.parse(seiviJson);
+    asia = seivi['asia'];
+    //console.log(asia);
+    return asia;
+  }
+}
+
 function addCreature(name, initiative, hp) {
   if (creatureWithNameExists(name)) {
     var msg = {
@@ -45,9 +67,9 @@ function addCreature(name, initiative, hp) {
 }
 
 function initWindow() {
-  addCreature('Aboleth', 12, 100);
-  addCreature('uthal', 5, 6);
-  addCreature('kobold123', 36, 77);
+  //addCreature('Aboleth', 12, 100);
+  //addCreature('uthal', 5, 6);
+  //addCreature('kobold123', 36, 77);
 
   var foo = document.querySelector("#creaturesWindow");
   
@@ -304,7 +326,14 @@ function createAddUi() {
     var hpCell = document.createElement('td');
     hpCell.appendChild(hpInput);
     
-    var emtyCell = document.createElement('td');
+    /*
+    var emptyInput = document.createElement('input');
+    emptyInput.setAttribute('type', 'text');
+    emptyInput.setAttribute('id', 'emptyCell');
+    */
+
+    var emptyCell = document.createElement('td');
+    //emptyCell.appendChild(emptyInput);
 
     var button = document.createElement('input');
     button.setAttribute('type', 'button');
@@ -317,7 +346,7 @@ function createAddUi() {
     row.appendChild(nameCell);
     row.appendChild(initiativeCell);
     row.appendChild(hpCell);
-    row.appendChild(emtyCell);
+    row.appendChild(emptyCell);
     row.appendChild(buttonCell);
 
     return row;
