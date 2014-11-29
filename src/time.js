@@ -75,3 +75,5 @@ function timeFormat(unit) {
 }
 
 var clock = new Clock();
+var turnTick = 90;
+var turnAudio = document.getElementById("drm-audio");

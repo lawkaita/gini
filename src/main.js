@@ -4,6 +4,7 @@ var input = document.getElementById('inputArea');
 var recentCommands = [];
 var rci = new RecentCommandIterator();
 var charWidth = 7;
+var turnAudio = null;
 
 function init() {
   console.log(input);
@@ -17,6 +18,7 @@ function init() {
   */
   loadSession();
   initWindow();
+  turnAudio = document.getElementById("drm-audio");
   declareFontSize();
   input.focus();
 }
