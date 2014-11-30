@@ -4,6 +4,7 @@ function Clock() {
   
   this.turnSeconds = 0;
   this.turnMinutes = 0;
+  this.tickSeconds = 0;
   
   this.turns = 0;
   
@@ -14,6 +15,7 @@ function Clock() {
 Clock.prototype.secondPassed = function() {
   this.seconds++;
   this.turnSeconds++;
+  this.tickSeconds++;
   
   if (this.seconds === 60) {
     this.seconds = 0;
@@ -24,6 +26,12 @@ Clock.prototype.secondPassed = function() {
     this.turnSeconds = 0;
     this.turnMinutes++;
   }
+
+  if (this.tickSeconds === turnTick){
+    this.tickSeconds = 0;
+    turnAudio.play();
+    nextCommand();
+  } 
   
   return true;
 }
@@ -75,5 +83,4 @@ function timeFormat(unit) {
 }
 
 var clock = new Clock();
-var turnTick = 90;
-var turnAudio = document.getElementById("drm-audio");
+var turnTick = 10;
