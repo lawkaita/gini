@@ -16,7 +16,7 @@ function init() {
   var mainInput = document.getElementById('mainInput');
   mainInput.addEventListener('keydown', keypress);
   */
-  loadSession();
+  //loadSession();
   initWindow();
   turnAudio = document.getElementById("drm-audio");
   declareFontSize();
@@ -101,7 +101,7 @@ function processInput(inputText) {
     rci.index++;
   }
   printOutputmsgs(outputmsgs);
-  save();
+  //save();
 }
 
 function printOutputmsgs(outputmsgs) {
@@ -120,18 +120,18 @@ function openMsg(msg) {
     text: '',
     rowClass: 'soutRow'
   }
-  
+
   for (var i in paramNames) {
     var paramName = paramNames[i];
     if (msg[paramName] !== undefined) {
       opened[paramName] = msg[paramName];
     }
   }
-  
+
   if((opened['label'] !== '') && (opened['text'] !== '')) {
     opened['label'] = opened['label'] + ': ';
   }
-  
+
   return opened;
 }
 
@@ -159,7 +159,7 @@ function addNewInputArea_dec() {
   input.setAttribute('spellcheck', 'false');
   input.rows = 1;
   input.addEventListener('keydown', keypress);
-  
+
   var textWin = document.querySelector('#textRows');
   textWin.appendChild(input);
   input.focus();
@@ -224,7 +224,7 @@ function printLine(line, rowClass) {
   } else {
     divClass = rowClass;
   }
-  
+
   div.setAttribute('class', divClass);
   //var width = textRows.offsetWidth;
   //div.setAttribute('style', 'width:' + (width - 3) + "px");
