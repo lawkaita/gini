@@ -12,7 +12,7 @@ function Clock() {
   this.battery;
 }
 
-var turnTick = 90;
+var tick = 90;
 
 Clock.prototype.secondPassed = function() {
   this.seconds++;
@@ -29,10 +29,22 @@ Clock.prototype.secondPassed = function() {
     this.turnMinutes++;
   }
 
-  if (this.tickSeconds === turnTick){
+  if (this.tickSeconds === (Math.floor(tick/2))) {
+    audioHalf.play();
+  }
+
+  if (this.tickSeconds === Math.floor(tick*(3/4))) {
+    audioHurry.play();
+  }
+
+  if (this.tickSeconds === (tick - 7)){
+    audioLastSeven.play();
+  }
+
+  if (this.tickSeconds === tick) {
     this.tickSeconds = 0;
-    turnAudio.play();
-    send("next");
+    var outputMsgs = send("next");
+    printOutputmsgs(outputMsgs);
   }
 
   return true;
@@ -65,7 +77,7 @@ Clock.prototype.zeroTick = function() {
 }
 
 Clock.prototype.setTick = function(param) {
-  turnTick = param;
+  tick = param;
 }
 
 Clock.prototype.outWrite = function() {
@@ -94,3 +106,12 @@ function timeFormat(unit) {
 }
 
 var clock = new Clock();
+
+var audioHalf = null;
+var audioHurry = null;
+var audioLastSeven = null;
+function loadSound() {
+  audioHalf = document.getElementById("half");
+  audioHurry = document.getElementById("hurry");
+  audioLastSeven = document.getElementById("last7");
+}
