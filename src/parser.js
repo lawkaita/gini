@@ -26,6 +26,7 @@ var verbs = {
   "tick": tickCommand,
   "pause": pauseCommand,
   "continue": continueCommand,
+  "volume": volumeCommand,
 
   //math
   "sum": sumCommand,
@@ -55,7 +56,14 @@ var syntaxList = {
   "dmg": function(params) { return nameMathCheck(params) },
   "harm": function(params) { return nameMathCheck(params) },
   "hurt": function(params) { return nameMathCheck(params) },
-  "heal": function(params) { return nameMathCheck(params) }
+  "heal": function(params) { return nameMathCheck(params) },
+  "tick": function(params) {
+    var number = params[0];
+    if (!wasParsedAsMath(number)) {
+      return false;
+    }
+    return true;
+  }
 };
 
 function nameMathCheck(params) {
@@ -249,6 +257,13 @@ function pauseCommand() {
 function continueCommand() {
   clock.start();
   return okmsg;
+}
+
+function volumeCommand(params){
+  var volumeToBeResolved = params[0];
+  var volumePercent = runParsed(volumeToBeResolved);
+  var volume = volumePercent/100;
+  return setVolume(volume);
 }
 
 function returnAsNumber(param) {

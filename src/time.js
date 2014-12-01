@@ -110,8 +110,17 @@ var clock = new Clock();
 var audioHalf = null;
 var audioHurry = null;
 var audioLastSeven = null;
+
 function loadSound() {
   audioHalf = document.getElementById("half");
   audioHurry = document.getElementById("hurry");
   audioLastSeven = document.getElementById("last7");
+}
+
+function setVolume(volume) {
+  audioHalf.volume = volume;
+  audioHurry.volume = volume;
+  audioLastSeven.volume = volume;
+
+  return okmsg;
 }
