@@ -216,6 +216,14 @@ function soutMath(line) {
 
 function printLine(line, rowClass) {
   var textRows = document.querySelector('#textRows');
+  if (rowClass === 'url') {
+    var a = document.createElement('a');
+    a.setAttribute('href', line);
+    a.setAttribute('target', '_blank');
+    a.innerHTML = 'link';
+    textRows.appendChild(a);
+    return;
+  }
   var div =  document.createElement('div');
   var divClass;
   if (rowClass === undefined) {

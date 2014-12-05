@@ -21,6 +21,7 @@ var verbs = {
   "remark": remarkCommand,
   "unremark": unremarkCommand,
   "next": nextCommand,
+  "drive": getFileIdCommand,
 
   //clock
   "tick": tickCommand,
@@ -86,6 +87,16 @@ function wasParsedAsMath(object) {
         function(x) {return object.command === x}));
   return arrayContainsObject(booleanArray, true);
 }
+
+function getFileIdCommand(params) {
+  var url = params[0];
+  var matched = url.match(/[-\w]{25,}/)[0];
+  var msgToReturn = {
+    text: "http://drive.google.com/uc?export=view&id=" + matched,
+    rowClass: 'url'
+  } 
+  return msgToReturn;
+}  
 
 function addCreatureCommand(params) {
   var name = params[0];
