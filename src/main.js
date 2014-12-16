@@ -252,6 +252,11 @@ function send(inputText) {
   return output;
 }
 
+function doSend(inputText) {
+  var output = send(inputText);
+  printOutputmsgs(output);
+}
+
 function scrollDown(myDiv) {
   myDiv.scrollTop = myDiv.scrollHeight;
 }

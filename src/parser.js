@@ -25,6 +25,7 @@ var verbs = {
 
   //clock
   "tick": tickCommand,
+  "overtime": overtimeCommand,
   "pause": pauseCommand,
   "continue": continueCommand,
   "volume": volumeCommand,
@@ -245,18 +246,29 @@ function nextCommand() {
   if(!clock.isOn) {
     clock.start();
   }
-  clock.zeroTick();
+  ticker.zeroTick();
   nextInitiativeIndex();
   updateUi();
   var toReturn = clock.outWrite();
-  clock.turnPassed();
+  turnTracker.turnPassed();
   return toReturn;
 }
 
 function tickCommand(params) {
   var intToBeResolved = params[0];
   var int = runParsed(intToBeResolved);
-  clock.setTick(int);
+  ticker.setTick(int);
+  return okmsg;
+}
+
+function overtimeCommand(params) {
+  var onOrOffString = params[0];
+  if (onOrOffString === 'on') {
+   ticker.setOverTime(true);
+  }
+  if (onOrOffString === 'off') {
+   ticker.setOverTime(false);
+  } 
   return okmsg;
 }
 
