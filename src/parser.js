@@ -48,7 +48,7 @@ var syntaxList = {
     if (!wasParsedAsMath(initiative)) {
       return false;
     }
-    if (!wasParsedAsMath(hp)) {
+    if (hp !== undefined && !wasParsedAsMath(hp)) {
       return false;
     }
 
@@ -104,7 +104,12 @@ function addCreatureCommand(params) {
   var initiativeToBeResolved = params[1];
   var initiative = runParsed(initiativeToBeResolved);
   var hpToBeResolved = params[2];
-  var hp = runParsed(hpToBeResolved);
+  var hp;
+  if (hpToBeResolved === undefined) {
+    hp = "-";
+  } else {
+    hp = runParsed(hpToBeResolved);
+  }
   var feedback = addCreature(name, initiative, hp);
   updateUi();
   return feedback;

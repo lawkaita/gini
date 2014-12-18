@@ -167,7 +167,11 @@ function damageCreatureByName(name, dmg) {
     return noCreatureWithNameMsg;
   }
   var creature = database[index];
-  creature.hp = creature.hp - dmg;
+  if (creature.hp === "-") {
+    creature.hp = -dmg;
+  } else {
+    creature.hp = creature.hp - dmg;
+  }
   updateUi();
   return okmsg;
 }
