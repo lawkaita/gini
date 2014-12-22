@@ -1,4 +1,4 @@
-var diceRegex = /\b[1-9]?d([1-9]|(1[0-9])|20)\b/;
+var diceRegex = /^\b([1-9][0-9]{0,2})?d([1-9][0-9]{0,2})\b$/;
 var alphaNumericCharacterRegex = /\b\w\b/;
 var syntaxErrorMsg = {
   label: "[SYNTAX ERROR]",
@@ -399,7 +399,7 @@ function arrayIsDice(parts) {
 }
 
 function isDice(string) {
-  return diceRegex.test(string) && (string.length <= 4);
+  return diceRegex.test(string);
 }
 
 function isMinus(string) {
@@ -623,7 +623,7 @@ function parseSentence(command) {
   var verb = firstSplitted[0];
   var rest = firstSplitted[1];
 
-  var paramArray = []
+  var paramArray = [];
 
   while(true) {
     if (isBlank(rest)) {
