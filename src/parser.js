@@ -352,6 +352,7 @@ function addPlusBeforeMinus(command) {
   if (command[0] === "-") {
     command = "0 " + command;
   }
+  
   readpoint = 0;
   while(readpoint < command.length) {
     symbolAtPoint = command[readpoint];
@@ -369,6 +370,9 @@ function addPlusBeforeMinus(command) {
 
 function splitToSummands(command) {
   var toProcess = addPlusBeforeMinus(command);
+  if (toProcess[0] === '+') {
+    toProcess = toProcess.substring(1);
+  } 
   var summands = toProcess.split('+');
   for (var i = 0; i < summands.length; i++) {
     var trimmed = summands[i].trim();
