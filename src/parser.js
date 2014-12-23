@@ -635,9 +635,21 @@ function parseSentence(command) {
       var startIndexInclusive = scanResult[0];
       var endIndexExclusive = scanResult[1];
 
-      var sumToParse = rest.slice(startIndexInclusive, endIndexExclusive);
-      var parsedSum = parseSum(sumToParse);
-      paramArray.push(parsedSum);
+      var sumLikeToParse = rest.slice(startIndexInclusive, endIndexExclusive);
+      if (isSumAndOnlySum(sumLikeToParse)) {
+        var sumToParse = sumLikeToParse;
+        var parsedSum = parseSum(sumToParse);
+        paramArray.push(parsedSum);
+      } else {
+        var sumLikeToParseSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(sumLikeToParse);
+        var sumLikeToParse = sumLikeToParseSplitted[1];
+        if (isMath(sumLikeToParse)) {
+          var sumToParse = sumLikeToParse;
+          var parsedSum = parseSum(sumToParse);
+          paramArray.push(sumLikeToParseSplitted[0]);
+          paramArray.push(parsedSum);
+        }
+      }
 
       rest = rest.slice(endIndexExclusive + 1);
       continue;
