@@ -59,12 +59,11 @@ var syntaxList = {
   "harm": function(params) { return nameMathCheck(params) },
   "hurt": function(params) { return nameMathCheck(params) },
   "heal": function(params) { return nameMathCheck(params) },
-  "tick": function(params) {
-    var number = params[0];
-    if (!wasParsedAsMath(number)) {
-      return false;
-    }
-    return true;
+  "tick": function(params) { var supposedMath = params[0]; return wasParsedAsMath(supposedMath)},
+  "volume": function(params) {var supposedMath = params[0]; return wasParsedAsMath(supposedMath)},
+  "overtime": function(params) {
+    var onOrOffString = params[0];
+    return (onOrOffString === 'on' || onOrOffString === 'off');
   }
 };
 
@@ -262,19 +261,17 @@ function nextCommand() {
 function tickCommand(params) {
   var intToBeResolved = params[0];
   var int = runParsed(intToBeResolved);
-  ticker.setTick(int);
-  return okmsg;
+  return ticker.setTick(int);
 }
 
 function overtimeCommand(params) {
   var onOrOffString = params[0];
   if (onOrOffString === 'on') {
-   ticker.setOverTime(true);
+   return ticker.setOverTime(true);
   }
   if (onOrOffString === 'off') {
-   ticker.setOverTime(false);
+   return ticker.setOverTime(false);
   } 
-  return okmsg;
 }
 
 function pauseCommand() {
@@ -633,7 +630,8 @@ function parseSentence(command) {
     if (isBlank(rest)) {
       break;
     }
-
+    
+    //read sum
     if (startsWithSumLike(rest)) {
       var scanResult = scanFirstSumLike(rest);
       var startIndexInclusive = scanResult[0];

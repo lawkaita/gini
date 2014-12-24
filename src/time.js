@@ -87,11 +87,36 @@ function zeroTick() {
 }
 
 function setTick(param) {
-  this.tick = param;
+  if (param >= 0) {
+    this.tick = param;
+    var msg = {
+      label: ok,
+      text: "tick is set to " + param + " seconds",
+      rowClass: 'soutRow'
+    }
+    return msg;
+  } else {
+    var msg = {
+      label: fail,
+      text: "tick must be greater than or equal to 0",
+      rowClass: 'error'
+    };
+    return msg;
+  }
 }
 
 function setOverTime(bool) {
   this.overTime = bool;
+  var onOrOffString = 'off';
+  if (bool) {
+    onOrOffString = 'on';
+  }
+  var msg = {
+    label: ok,
+    text: "overtime is " + onOrOffString,
+    rowClass: 'soutRow'
+  }
+  return msg;
 }
 
 Clock.prototype.outWrite = function() {
@@ -138,6 +163,8 @@ var audioHalf = null;
 var audioHurry = null;
 var audioLastSeven = null;
 
+var volume = 0;
+
 function loadSound() {
   audioHalf = document.getElementById("half");
   audioHurry = document.getElementById("hurry");
@@ -145,9 +172,21 @@ function loadSound() {
 }
 
 function setVolume(volume) {
+  if (volume > 1 || volume < 0) {
+    var msg = {
+      label: fail,
+      text: "volume must be between 0 and 100",
+      rowClass: 'error',
+    };
+    return msg;
+  }
+
   audioHalf.volume = volume;
   audioHurry.volume = volume;
   audioLastSeven.volume = volume;
 
-  return okmsg;
+  return msg = {
+    label: ok,
+    text: "volume: " + volume*100 + " percent"
+  };
 }

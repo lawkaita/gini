@@ -41,7 +41,7 @@ function addCreature(name, initiative, hp) {
       label: fail,
       text: "creature with name exists",
       rowClass: 'error'
-    }
+    };
     return msg;
   }
   
@@ -173,7 +173,12 @@ function damageCreatureByName(name, dmg) {
     creature.hp = creature.hp - dmg;
   }
   updateUi();
-  return okmsg;
+  var msgToReturn = {
+    label: ok,
+    text: creature.name + " suffered " + dmg + " damage",
+    rowClass: "soutRow"
+  }
+  return msgToReturn;
 }
 
 function remarkCreature(name, remark) {
