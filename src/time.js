@@ -105,8 +105,8 @@ function setTick(param) {
   }
 }
 
-function setOverTime(bool) {
-  this.overTime = bool;
+function getOverTimeMsg() {
+  var bool = this.overTime;
   var onOrOffString = 'off';
   if (bool) {
     onOrOffString = 'on';
@@ -117,6 +117,11 @@ function setOverTime(bool) {
     rowClass: 'soutRow'
   }
   return msg;
+}
+
+function setOverTime(bool) {
+  this.overTime = bool;
+  return this.getOverTimeMsg();
 }
 
 Clock.prototype.outWrite = function() {
@@ -153,6 +158,7 @@ ticker.secondPassed = tickerSecondPassed;
 ticker.setTick = setTick;
 ticker.zeroTick = zeroTick;
 ticker.setOverTime = setOverTime;
+ticker.getOverTimeMsg = getOverTimeMsg;
 turnTracker.turns = 0;
 turnTracker.secondPassed = turnTrackerSecondPassed;
 turnTracker.turnPassed = turnTrackerTurnPassed;
@@ -163,7 +169,7 @@ var audioHalf = null;
 var audioHurry = null;
 var audioLastSeven = null;
 
-var volume = 0;
+var globalVolumeNumber = 0;
 
 function loadSound() {
   audioHalf = document.getElementById("half");
@@ -181,6 +187,7 @@ function setVolume(volume) {
     return msg;
   }
 
+  globalVolumeNumber = volume;
   audioHalf.volume = volume;
   audioHurry.volume = volume;
   audioLastSeven.volume = volume;

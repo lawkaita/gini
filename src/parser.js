@@ -61,11 +61,11 @@ var syntaxList = {
   "harm": function(params) { return nameMathCheck(params) },
   "hurt": function(params) { return nameMathCheck(params) },
   "heal": function(params) { return nameMathCheck(params) },
-  "tick": function(params) { var supposedMath = params[0]; return wasParsedAsMath(supposedMath)},
-  "volume": function(params) {var supposedMath = params[0]; return wasParsedAsMath(supposedMath)},
+  "tick": function(params) { var supposedMath = params[0]; return (wasParsedAsMath(supposedMath) || supposedMath === undefined)},
+  "volume": function(params) {var supposedMath = params[0]; return (wasParsedAsMath(supposedMath) || supposedMath === undefined)},
   "overtime": function(params) {
     var onOrOffString = params[0];
-    return (onOrOffString === 'on' || onOrOffString === 'off');
+    return (onOrOffString === 'on' || onOrOffString === 'off' || onOrOffString === undefined);
   }
 };
 
@@ -264,12 +264,24 @@ function nextCommand() {
 
 function tickCommand(params) {
   var intToBeResolved = params[0];
+  if (intToBeResolved === undefined) {
+    var msg = {
+      text: "tick = " + ticker.tick,
+      rowClass: 'soutRow'
+    }
+    return msg;
+  }
   var int = runParsed(intToBeResolved);
   return ticker.setTick(int);
 }
 
 function overtimeCommand(params) {
   var onOrOffString = params[0];
+  if (onOrOffString === undefined) {
+    var msg = ticker.getOverTimeMsg();
+    msg['label'] = undefined;
+    return msg; 
+  }
   if (onOrOffString === 'on') {
    return ticker.setOverTime(true);
   }
@@ -290,6 +302,13 @@ function continueCommand() {
 
 function volumeCommand(params){
   var volumeToBeResolved = params[0];
+  if (volumeToBeResolved === undefined) {
+    var msg = {
+      text: "volume = " + globalVolumeNumber*100,
+      rowClass: 'soutRow'
+    }
+    return msg;
+  }
   var volumePercent = runParsed(volumeToBeResolved);
   var volume = volumePercent/100;
   return setVolume(volume);
