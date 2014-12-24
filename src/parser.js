@@ -19,7 +19,9 @@ var verbs = {
   "clear": clearCommand,
   "help": printHelpCommand,
   "remark": remarkCommand,
+  "tag": remarkCommand,
   "unremark": unremarkCommand,
+  "untag": unremarkCommand,
   "next": nextCommand,
   "drive": getFileIdCommand,
 
@@ -242,7 +244,9 @@ function collapseArrayToString(array) {
 
 function unremarkCommand(params) {
   var name = params[0];
-  var feedback = unremarkCreature(name);
+  var remarkStrs = params.slice(1, params.length);
+  var remark = collapseArrayToString(remarkStrs);
+  var feedback = unremarkCreature(name, remark);
   return feedback;
 }
 

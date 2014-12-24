@@ -187,20 +187,55 @@ function remarkCreature(name, remark) {
     return noCreatureWithNameMsg;
   }
   var creature = database[index];
-  creature.remarks.push(remark);
-  updateUi();
-  return okmsg;
+  var remarks = creature.remarks;
+  var remarkIndex = getRemarkIndex(remarks, remark);
+  if(remarkIndex === undefined) {
+    remarks.push(remark);
+    updateUi();
+    return okmsg;
+  } else {
+    var msg = {
+      label: fail,
+      text: "creature already has this mark",
+      rowClass: 'error'
+    };
+    return msg;
+  }
 }
 
-function unremarkCreature(name) {
+function unremarkCreature(name, remark) {
   var index = getCreatureIndex(name, 'name');
   if (index === undefined) {
     return noCreatureWithNameMsg;
   }
   var creature = database[index];
-  creature.remarks = [];
+  var remarks = creature.remarks;
+  if (remark === 'all') {
+    creature.remarks = [];
+    updateUi();
+    return okmsg;
+  }
+  var remarkIndex = getRemarkIndex(remarks, remark);
+  if (remarkIndex === undefined) {
+    var msg = {
+      label: fail,
+      text: "creature does not have this mark",
+      rowClass: 'error'
+    };
+    return msg;
+  }
+  remarks.splice(remarkIndex, 1);
   updateUi();
-  return okmsg;
+  return okmsg;  
+}
+
+function getRemarkIndex(remarkArray, remarkToSearch) {
+  for (var i in remarkArray) {
+    var remark = remarkArray[i];
+    if (remark === remarkToSearch) {
+      return i;
+    }
+  }
 }
 
 function getCreatureIndex(attribute, attributeName) {
