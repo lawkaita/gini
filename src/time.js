@@ -169,12 +169,20 @@ var audioHalf = null;
 var audioHurry = null;
 var audioLastSeven = null;
 
-var globalVolumeNumber = 0;
+var globalVolumeNumber = 0.5;
 
 function loadSound() {
   audioHalf = document.getElementById("half");
   audioHurry = document.getElementById("hurry");
   audioLastSeven = document.getElementById("last7");
+  assignVolumeToAudio(globalVolumeNumber);
+}
+
+function assignVolumeToAudio(volume) {
+  globalVolumeNumber = volume;
+  audioHalf.volume = volume;
+  audioHurry.volume = volume;
+  audioLastSeven.volume = volume;
 }
 
 function setVolume(volume) {
@@ -187,10 +195,8 @@ function setVolume(volume) {
     return msg;
   }
 
-  globalVolumeNumber = volume;
-  audioHalf.volume = volume;
-  audioHurry.volume = volume;
-  audioLastSeven.volume = volume;
+  assignVolumeToAudio(volume);
+  audioHalf.play();
 
   return msg = {
     label: ok,
