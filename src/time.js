@@ -38,13 +38,26 @@ function tickerSecondPassed() {
       audioLastSeven.play();
     }
 
-    if (this.seconds === this.tick) {
+    if (this.seconds >= this.tick) {
       if (!this.overTime) {
         this.seconds = 0;
         doSend("next");
+      } else {
+        initiateOvertimeCount();
       }
     }
   }
+}
+
+var overtimeTracker = [];
+function initiateOvertimeCount() {
+  var currentIndex = initiativeIndex;
+  var creatureOvertimeClock = overtimeTracker[currentIndex];
+  if (creatureOvertimeClock === undefined) {
+    creatureOvertimeClock = new Clock();
+    overtimeTracker[currentIndex] = creatureOvertimeClock;
+  }
+  creatureOvertimeClock.secondPassed();
 }
 
 function turnTrackerSecondPassed() {
@@ -203,3 +216,5 @@ function setVolume(volume) {
     text: "volume: " + volume*100 + " percent"
   };
 }
+
+
