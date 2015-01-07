@@ -93,6 +93,9 @@ function turnTrackerTurnPassed() {
   this.turns++;
   this.seconds = 0;
   this.minutes = 0;
+  if (initiativeIndex === database.length - 1) {
+    this.rounds++;
+  }
 }
 
 function zeroTick() {
@@ -149,6 +152,7 @@ Clock.prototype.outWrite = function() {
   var toReturn =  "last turn time = " + turnTime + "\n"
                 + "total time     = " + totalTime + "\n"
                 + "turns played   = " + turnTracker.turns + "\n"
+                + "rounds played  = " + turnTracker.rounds + "\n"
                 + "time per turn  = " + timePerTurn;
 
   return toReturn;
@@ -173,6 +177,7 @@ ticker.zeroTick = zeroTick;
 ticker.setOverTime = setOverTime;
 ticker.getOverTimeMsg = getOverTimeMsg;
 turnTracker.turns = 0;
+turnTracker.rounds = 0;
 turnTracker.secondPassed = turnTrackerSecondPassed;
 turnTracker.turnPassed = turnTrackerTurnPassed;
 clock.takeToInvoke(ticker);
