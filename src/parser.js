@@ -784,15 +784,7 @@ function runCommandString(userInput) {
   if (parsed === undefined) {
     return syntaxErrorMsg;
   }
-  var commandName = parsed['command'];
-  var commandToRun = verbs[commandName];
-  var params = parsed['params'];
-  var paramsAreLegal = checkParamsLegality(commandName, params);
-  if (!paramsAreLegal) {
-    return syntaxErrorMsg;
-  }
-  var resolvedParams = resolveParams(params);
-  var result = commandToRun(resolvedParams);
+  var result = runParsed(parsed);
   if (result === undefined) {
     return syntaxErrorMsg;
   }
@@ -814,18 +806,34 @@ function runCommandString(userInput) {
   return result;
 }
 
-function resolveParams(paramsToBeResolved) {
-  return paramsToBeResolved.map(runParsedIgnoreString);
-}
-  
-function runParsedIgnoreString(parsedOrString) {
-  if (typeof parsedOrString === 'string') {
-    return parsedOrString;
+function runParsed(parsed) {
+  if (isAtomic(parsed)) {
+    return parsed;
   }
-  return runParsed(parsedOrString);
+  var commandName = parsed['command'];
+  var commandToRun = verbs[commandName];
+  var params = parsed['params'];
+  var paramsAreLegal = checkParamsLegality(commandName, params);
+  if (!paramsAreLegal) {
+    return undefined;
+  }
+  var resolvedParams = resolveParams(params);
+  var result = commandToRun(resolvedParams);
+  return result;
 }
 
-function runParsed(parsed) {
+function isAtomic(param) {
+  return (typeof param === 'string') || (isNumber(param))
+}
+
+function resolveParams(params) {
+  if (isAtomic(params)) {
+    return params;
+  }
+  return params.map(runParsed);
+}
+  
+function runParsed_old(parsed) {
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];
