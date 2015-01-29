@@ -11,6 +11,7 @@ var areYouSureMsg = {
 var verbs = {
   "add": addCreatureCommand,
   "remove": removeCreatureCommand,
+  "rm": removeCreatureCommand,
   "init":changeInitiativeCommand,
   "dmg": dealDamageCommand,
   "harm": dealDamageCommand,
@@ -61,8 +62,14 @@ var syntaxList = {
   "harm": function(params) { return nameMathCheck(params) },
   "hurt": function(params) { return nameMathCheck(params) },
   "heal": function(params) { return nameMathCheck(params) },
-  "tick": function(params) { var supposedMath = params[0]; return (wasParsedAsMath(supposedMath) || supposedMath === undefined)},
-  "volume": function(params) {var supposedMath = params[0]; return (wasParsedAsMath(supposedMath) || supposedMath === undefined)},
+  "tick": function(params) { 
+    var supposedMath = params[0]; 
+    return (wasParsedAsMath(supposedMath) || supposedMath === undefined)
+  },
+  "volume": function(params) {
+    var supposedMath = params[0];
+    return (wasParsedAsMath(supposedMath) || supposedMath === undefined)
+  },
   "overtime": function(params) {
     var onOrOffString = params[0];
     return (onOrOffString === 'on' || onOrOffString === 'off' || onOrOffString === undefined);
@@ -182,15 +189,12 @@ function clearCommand(params) {
     initiateCBD("clear");
     return msgToReturn;
   }
-
   if(param === 'encounter') {
     return clearEncounterCommand(params[1]);
   }
-
   if (param === 'console') {
     return clearConsoleCommand();
   }
-
   return syntaxErrorMsg;
 }
 
@@ -202,12 +206,10 @@ function clearEncounterCommand(sure) {
     comAssigner.reset();
     return emptyMsg;
   }
-
   if (sure !== 'y') {
     initiateCBD("clear encounter");
     return areYouSureMsg;
   }
-
   database = [];
   clock = new Clock();
   updateUi();
@@ -372,7 +374,6 @@ function addPlusBeforeMinus(command) {
   if (command[0] === "-") {
     command = "0 " + command;
   }
-  
   readpoint = 0;
   while(readpoint < command.length) {
     symbolAtPoint = command[readpoint];
@@ -405,7 +406,6 @@ function areSummamble(summands) {
   var isTrue = true;
   for(var i = 0; i < summands.length; i++) {
     var supposedMathString = summands[i];
-
     if (!isMathNotSum(supposedMathString)) {
       isTrue = false;
     }
@@ -418,7 +418,6 @@ function arrayIsDice(parts) {
     var diceString =  parts[0];
     return isDice(diceString);
   }
-
   return false;
 }
 
@@ -433,7 +432,6 @@ function isMinus(string) {
 
     return isMathNotSum(rest);
   }
-
   return false;
 }
 
@@ -455,98 +453,77 @@ function isAns(string) {
 
 function parseMath(command) {
   var parsed;
-
   if (isSumAndOnlySum(command)) {
     parsed = parseSum(command);
   }
-
   if (isDice(command)) {
     parsed = parseDice(command);
   }
-
   if (isMinus(command)) {
     parsed = parseMinus(command);
   }
-
   if (isNumberString(command)) {
     parsed = parseNumber(command);
   }
-
   if (isAns(command)) {
     parsed = parseAns(command);
   }
-
   return parsed;
 }
 
 function parseSum(command) {
   var summands = splitToSummands(command);
   var parsedSummands = parseSummands(summands);
-
   var parsed = {
     command: "sum",
     params: parsedSummands
   }
-
   return parsed;
 }
 
 function parseSummands(summands) {
   var parsedSummands = [];
-
   for (i = 0; i < summands.length; i++) {
     var summand = summands[i];
-
     parsedSummands[i] = parseMath(summand);
-
     /*
     if (isNumberString(summand)) {
       parsedSummands[i] = parseNumber(summand);
     }
-
     if(isDice(summand)) {
       parsedSummands[i] = parseDice(summand);
     }
-
     if (isMinus(command)) {
       parsedSummands[i] = parseMinus(command);
     }
-
     if(isAns(summand)) {
       parsedSummands[i] = parseAns(summand);
     }
     */
   }
-
   return parsedSummands;
 }
 
 function parseDice(command) {
   var parts = command.split("d");
-
   if (parts[0] === "") {
     parts[0] = "1";
   }
-
   var parsedParts = parts.map(parse);
-
   var parsed = {
     command: "dice",
     params: parsedParts
   };
-
   return parsed;
 }
 
 function parseMinus(command) {
   var toMinus = command.slice(1).trim();
   var toMinusParsed = parse(toMinus);
-
   var parsed = {
     command: "minus",
     params: [toMinusParsed]
   };
-
   return parsed;
 }
 
@@ -555,7 +532,6 @@ function parseNumber(command) {
     command: "number",
     params: command
   };
-
   return parsed;
 }
 
@@ -564,39 +540,32 @@ function parseAns(command) {
     command: "ans",
     params: []
   };
-
   return parsed;
 }
 
 function isSentence(command) {
   var parts = command.split(" ");
   var supposedVerb = parts[0];
-
   if(isAns(supposedVerb)) {
     return false;
   }
-
   return objectContainsKey(verbs, supposedVerb);
 }
 
 function parseAdd(splitted) {
   var verb = splitted[0];
   var rest = splitted[1];
-
   var nameAndMath = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
   var name = nameAndMath[0];
   var math = nameAndMath[1];
-
   var lastWhitespaceIndex = lastIndexOf(math, ' ');
   var initAndHp = splitAtIndex(math, lastWhitespaceIndex);
   var initiativeString = initAndHp[0];
   var hpString = initAndHp[1];
-
   var parsed = {
     command: verb,
     params: [name, parseMath(initiativeString), parseMath(hpString)]
   };
-
   return parsed;
 }
 
@@ -605,40 +574,31 @@ function parseOneWordSentence(commandString) {
     command: commandString,
     params: []
   };
-
   return parsed;
 }
 
 function parseSentence_old(command) {
   var commandPieces = command.split(" ");
   var numberOfPieces = commandPieces.length;
-
   if (numberOfPieces <= 1) {
     return parseOneWordSentence(command);
   }
-
   var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(command);
   var verb = splitted[0];
   var rest = splitted[1];
-
   if(verb === "add") {
     return parseAdd(splitted);
   }
-
   var restSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
-
   var restToMathIfMath = [];
   for(i = 0; i < restSplitted.length; i++) {
     var param = restSplitted[i];
-
     restToMathIfMath[i] = parseIfMath(param);
   }
-
   var parsed = {
     command: verb,
     params: restToMathIfMath
   };
-
   return parsed;
 }
 
@@ -646,20 +606,16 @@ function parseSentence(command) {
   var firstSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(command);
   var verb = firstSplitted[0];
   var rest = firstSplitted[1];
-
   var paramArray = [];
-
   while(true) {
     if (isBlank(rest)) {
       break;
     }
-    
     //read sum
     if (startsWithSumLike(rest)) {
       var scanResult = scanFirstSumLike(rest);
       var startIndexInclusive = scanResult[0];
       var endIndexExclusive = scanResult[1];
-
       var sumLikeToParse = rest.slice(startIndexInclusive, endIndexExclusive);
       if (isSumAndOnlySum(sumLikeToParse)) {
         var sumToParse = sumLikeToParse;
@@ -675,24 +631,19 @@ function parseSentence(command) {
           paramArray.push(parsedSum);
         }
       }
-
       rest = rest.slice(endIndexExclusive + 1);
       continue;
     }
-
     var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
     var toParse = splitted[0];
     var toPush = parseIfMath(toParse);
     paramArray.push(toPush);
-
     rest = splitted[1];
   }
-
   var parsed = {
     command: verb,
     params: paramArray
   };
-
   return parsed;
 }
 
@@ -706,18 +657,14 @@ function parseIfMath(param) {
 
 function scanFirstSumLike(string) {
   var firstPlusIndex = firstIndexOf(string, ["+", "-"]);
-
   if(firstPlusIndex === -1) {
     return [0,0];
   }
-
   var prefix = string.slice(0, firstPlusIndex);
   var trimmed = prefix.trim();
   var lastWhiteSpaceIndexBeforeFirstRelevantSymbol = trimmed.lastIndexOf(" ");
   var firstRelevantIndex = lastWhiteSpaceIndexBeforeFirstRelevantSymbol + 1;
-
   var toRead = string.slice(firstRelevantIndex);
-
   var readSymbol = "";
   var proceed = true;
   var expectingPlus = false;
@@ -725,13 +672,9 @@ function scanFirstSumLike(string) {
   var lastReadWasWhiteSpace = false;
   var readpoint = 0;
   var lastRelevantSymbolPoint = -1;
-
   var atLeastOnePlusSymbol = false;
-
-
   while(proceed) {
     readSymbol = toRead[readpoint];
-
     if (alphaNumericCharacterRegex.test(readSymbol)) {
       if (lastReadWasWhiteSpace && !expectingAlNuChar) {
         proceed = false;
@@ -742,11 +685,9 @@ function scanFirstSumLike(string) {
         lastReadWasWhiteSpace = false;
       }
     }
-
     if (readSymbol === " ") {
       lastReadWasWhiteSpace = true;
     }
-
     if (readSymbol === "+" || readSymbol === "-") {
       if (!expectingPlus) {
         proceed = false;
@@ -756,31 +697,24 @@ function scanFirstSumLike(string) {
         expectingPlus = false;
       }
     }
-
     readpoint++;
-
     if (readpoint >= toRead.length) {
       proceed = false;
     }
   }
-
   if (!atLeastOnePlusSymbol) {
     return [0, 0];
   }
-
   var firstNonRelevantIndex = firstRelevantIndex + lastRelevantSymbolPoint + 1;
-
   return [firstRelevantIndex, firstNonRelevantIndex];
 }
 
 function containsSumLike(string) {
   var scanResult = scanFirstSumLike(string);
   var scannedLength = scanResult[1] - scanResult[0];
-
   if (scannedLength <= 0) {
     return false;
   }
-
   return true;
 }
 
@@ -789,11 +723,9 @@ function startsWithSumLike(string) {
   var startIndexInclusive = scanResult[0];
   var endIndexExclusive = scanResult[1];
   var scannedLength = endIndexExclusive - startIndexInclusive;
-
   if ((scannedLength >= 1) && (startIndexInclusive === 0)) {
     return true;
   }
-
   return false;
 }
 
@@ -802,7 +734,6 @@ function isSumLike(string) {
   var startIndexInclusive = scanResult[0];
   var endIndexExclusive = scanResult[1];
   var scannedLength = endIndexExclusive - startIndexInclusive;
-
   if ((scannedLength >= 1) && (startIndexInclusive === 0) && (endIndexExclusive === string.length)) {
     return true;
   }
@@ -845,11 +776,9 @@ function objectContainsKey(object, key) {
 
 function checkParamsLegality(commandName, params) {
   var syntaxCheckFunction = syntaxList[commandName];
-
   if(syntaxCheckFunction === undefined) {
     return true;
   }
-
   return syntaxCheckFunction(params);
 }
 
@@ -860,27 +789,24 @@ function runCommandString(userInput) {
       text: "undefined input",
       rowClass: 'error'
     };
-
     return undefinedMsg;
   }
-
   var trimmed = userInput.trim();
   var parsed = parse(trimmed);
   if (parsed === undefined) {
     return syntaxErrorMsg;
   }
-
   var commandName = parsed['command'];
   var commandToRun = verbs[commandName];
   var params = parsed['params'];
   var paramsAreLegal = checkParamsLegality(commandName, params);
-
   if (!paramsAreLegal) {
     return syntaxErrorMsg;
   }
-
   var result = commandToRun(params);
-
+  if (parsed === undefined) {
+    return syntaxErrorMsg;
+  }
   if(isNumber(result)) {
     calc.setAns(result);
     var msgToReturn = {
@@ -889,7 +815,6 @@ function runCommandString(userInput) {
     }
     return msgToReturn;
   }
-
   if(typeof(result) === 'string') {
     var msgToReturn = {
       text: result,
@@ -897,14 +822,10 @@ function runCommandString(userInput) {
     }
     return msgToReturn;
   }
-
   return result;
 }
 
 function runParsed(parsed) {
-  if (parsed === undefined) {
-    return syntaxErrorMsg;
-  }
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];
