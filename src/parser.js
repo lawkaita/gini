@@ -109,15 +109,11 @@ function getFileIdCommand(params) {
 
 function addCreatureCommand(params) {
   var name = params[0];
-  var initiativeToBeResolved = params[1];
-  var initiative = runParsed(initiativeToBeResolved);
-  var hpToBeResolved = params[2];
-  var hp;
-  if (hpToBeResolved === undefined) {
+  var initiative = params[1];
+  var hp = params[2];
+  if (hp === undefined) {
     hp = "-";
-  } else {
-    hp = runParsed(hpToBeResolved);
-  }
+  } 
   var feedback = addCreature(name, initiative, hp);
   updateUi();
   return feedback;
@@ -156,24 +152,22 @@ function removeCreatureCommand(params) {
 
 function changeInitiativeCommand(params) {
   var name = params[0];
-  var initiativeToBeResolved = params[1];
-  var initiative = runParsed(initiativeToBeResolved);
+  var initiative = params[1];
   var feedback = changeCreatureInitiativeByName(name, initiative);
   return feedback;
 }
 
 function dealDamageCommand(params) {
   var name = params[0];
-  var dmgToBeResolved = params[1];
-  var damage = runParsed(dmgToBeResolved);
+  var damage = params[1];
   var feedback = damageCreatureByName(name, damage);
   return feedback;
 }
 
 function healCommand(params) {
   var name = params[0];
-  var dmgToBeResolved = params[1];
-  var damage = 0 - runParsed(dmgToBeResolved);
+  var toHeal = params[1];
+  var damage = 0 - toHeal; 
   var feedback = damageCreatureByName(name, damage);
   return feedback;
 }
@@ -265,16 +259,15 @@ function nextCommand() {
 }
 
 function tickCommand(params) {
-  var intToBeResolved = params[0];
-  if (intToBeResolved === undefined) {
+  var number = params[0];
+  if (number === undefined) {
     var msg = {
       text: "tick = " + ticker.tick,
       rowClass: 'soutRow'
     }
     return msg;
   }
-  var int = runParsed(intToBeResolved);
-  return ticker.setTick(int);
+  return ticker.setTick(number);
 }
 
 function overtimeCommand(params) {
@@ -303,15 +296,14 @@ function continueCommand() {
 }
 
 function volumeCommand(params){
-  var volumeToBeResolved = params[0];
-  if (volumeToBeResolved === undefined) {
+  var VrolumePercent = params[0];
+  if (VrolumePercent === undefined) {
     var msg = {
       text: "volume = " + globalVolumeNumber*100,
       rowClass: 'soutRow'
     }
     return msg;
   }
-  var volumePercent = runParsed(volumeToBeResolved);
   var volume = volumePercent/100;
   return setVolume(volume);
 }
@@ -321,21 +313,17 @@ function returnAsNumber(param) {
 }
 
 function sumCommand(params) {
-  var summands = params.map(runParsed);
-  return calc.sum(summands);
+  return calc.sum(params);
 }
 
 function minusCommand(params) {
-  var toMinusToBeResolved = params[0];
-  var toMinus = runParsed(toMinusToBeResolved);
+  var toMinus = params[0];
   return (-1)*toMinus;
 }
 
 function throwDiceCommand(params) {
-  var timesToBeResolved = params[0];
-  var diceSizeToBeResolved = params[1];
-  var times = runParsed(timesToBeResolved);
-  var diceSize = runParsed(diceSizeToBeResolved);
+  var times = params[0];
+  var diceSize = params[1];
   return calc.throwDice(times, diceSize);
 }
 
@@ -803,8 +791,9 @@ function runCommandString(userInput) {
   if (!paramsAreLegal) {
     return syntaxErrorMsg;
   }
-  var result = commandToRun(params);
-  if (parsed === undefined) {
+  var resolvedParams = resolveParams(params);
+  var result = commandToRun(resolvedParams);
+  if (result === undefined) {
     return syntaxErrorMsg;
   }
   if(isNumber(result)) {
@@ -825,15 +814,24 @@ function runCommandString(userInput) {
   return result;
 }
 
+function resolveParams(paramsToBeResolved) {
+  return paramsToBeResolved.map(runParsedIgnoreString);
+}
+  
+function runParsedIgnoreString(parsedOrString) {
+  if (typeof parsedOrString === 'string') {
+    return parsedOrString;
+  }
+  return runParsed(parsedOrString);
+}
+
 function runParsed(parsed) {
   var commandName = parsed['command'];
   var command = verbs[commandName];
   var params = parsed['params'];
+  if (commandName === undefined) {
+    console.log("errorAtRunParsed");
+    console.log(parsed);
+  }
   return command(params);
 }
-
-
-
-
-
-
