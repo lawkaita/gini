@@ -24,7 +24,8 @@ var verbs = {
   "unremark": unremarkCommand,
   "untag": unremarkCommand,
   "next": nextCommand,
-  "drive": getFileIdCommand,
+  "drive": getHost,
+  "var": varCommand,
 
   //clock
   "tick": tickCommand,
@@ -97,7 +98,7 @@ function wasParsedAsMath(object) {
   return arrayContainsObject(booleanArray, true);
 }
 
-function getFileIdCommand(params) {
+function getHost(params) {
   var url = params[0];
   var matched = url.match(/[-\w]{25,}/)[0];
   var msgToReturn = {
@@ -105,7 +106,12 @@ function getFileIdCommand(params) {
     rowClass: 'url'
   } 
   return msgToReturn;
-}  
+}
+
+function varCommand(params) {
+  var name = params[0];
+  var data = params[1];
+}
 
 function addCreatureCommand(params) {
   var name = params[0];
@@ -224,8 +230,7 @@ var printHelpCommand;
 
 function remarkCommand(params) {
   var name = params[0];
-  var remarkStrs = params.slice(1, params.length);
-  var remark = collapseArrayToString(remarkStrs);
+  var remark = params[1];
   var feedback = remarkCreature(name, remark);
   return feedback;
 }
@@ -595,6 +600,18 @@ function parseSentence(command) {
   var verb = firstSplitted[0];
   var rest = firstSplitted[1];
   var paramArray = [];
+  if (verb === "tag" || verb === "remark" ) {
+    var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
+    var name = splitted[0];
+    var rest = splitted[1];
+    paramArray.push(name);
+    paramArray.push(rest);
+    rest = "";
+  }
+  if (verb === "var") {
+    paramArray.push(rest);
+    rest = "";
+  }
   while(true) {
     if (isBlank(rest)) {
       break;
