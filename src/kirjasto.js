@@ -1,4 +1,5 @@
 var database = [];
+var customVars = [];
 var initiativeIndex;
 var nextCreatureId = 0;
 var ok = "[OK]";

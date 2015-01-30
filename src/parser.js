@@ -111,6 +111,12 @@ function getHost(params) {
 function varCommand(params) {
   var name = params[0];
   var data = params[1];
+  var variable = {
+    name: name,
+    data: data
+  }
+  customVars.push(variable);
+  return okmsg;
 }
 
 function addCreatureCommand(params) {
@@ -600,15 +606,11 @@ function parseSentence(command) {
   var verb = firstSplitted[0];
   var rest = firstSplitted[1];
   var paramArray = [];
-  if (verb === "tag" || verb === "remark" ) {
+  if (verb == "var" || verb === "tag" || verb === "remark" ) {
     var splitted = splitByWhitespaceOnceIfContainsWhiteSpace(rest);
     var name = splitted[0];
     var rest = splitted[1];
     paramArray.push(name);
-    paramArray.push(rest);
-    rest = "";
-  }
-  if (verb === "var") {
     paramArray.push(rest);
     rest = "";
   }
