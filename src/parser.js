@@ -771,6 +771,13 @@ function checkParamsLegality(commandName, params) {
 }
 
 function runCommandString(userInput) {
+  if (/;/.test(userInput)) {
+    var commands = userInput.split(';');
+    for (var i in commands) {
+      doSend(commands[i]);
+    }
+    return;
+  }
   if (userInput === undefined) {
     var undefinedMsg = {
       label: '[FAIL]',
