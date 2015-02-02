@@ -15,7 +15,7 @@ function init() {
   var mainInput = document.getElementById('mainInput');
   mainInput.addEventListener('keydown', keypress);
   */
-  //loadSession();
+  loadSession();
   initWindow();
   loadSound();
   declareFontSize();
@@ -100,7 +100,7 @@ function processInput(inputText) {
     rci.index++;
   }
   printOutputmsgs(outputmsgs);
-  //save();
+  save();
 }
 
 function printOutputmsgs(outputmsgs) {
