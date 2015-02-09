@@ -307,8 +307,8 @@ function continueCommand() {
 }
 
 function volumeCommand(params){
-  var VrolumePercent = params[0];
-  if (VrolumePercent === undefined) {
+  var volumePercent = params[0];
+  if (volumePercent === undefined) {
     var msg = {
       text: "volume = " + globalVolumeNumber*100,
       rowClass: 'soutRow'
