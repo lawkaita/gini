@@ -63,6 +63,7 @@ var syntaxList = {
   "harm": function(params) { return nameMathCheck(params) },
   "hurt": function(params) { return nameMathCheck(params) },
   "heal": function(params) { return nameMathCheck(params) },
+  "drive": function(params) { return !(params[0] === undefined)},
   "tick": function(params) { 
     var supposedMath = params[0]; 
     return (wasParsedAsMath(supposedMath) || supposedMath === undefined)
@@ -100,7 +101,16 @@ function wasParsedAsMath(object) {
 
 function getHost(params) {
   var url = params[0];
-  var matched = url.match(/[-\w]{25,}/)[0];
+  var matchArray = url.match(/[-\w]{25,}/);
+  if (matchArray === null) {
+    var msgNull = {
+      label: fail,
+      text: "no drive id read",
+      rowClass: 'error'
+    }
+    return msgNull;
+  }
+  var matched = matchArray[0];
   var msgToReturn = {
     text: "http://drive.google.com/uc?export=view&id=" + matched,
     rowClass: 'url'
@@ -354,6 +364,9 @@ function parse(command) {
 }
 
 function isMath(command) {
+  if ( command == undefined ) {
+    return false;
+  }
   return isSumAndOnlySum(command) || isDice(command) || isMinus(command) ||isNumberString(command) || isAns(command);
 }
 
@@ -630,6 +643,7 @@ function parseSentence(command) {
         paramArray.push(parsedSum);
       } else {
         var sumLikeToParseSplitted = splitByWhitespaceOnceIfContainsWhiteSpace(sumLikeToParse);
+        // is sumLikeToParseSplitted[1] === undefined?
         var sumLikeToParse = sumLikeToParseSplitted[1];
         if (isMath(sumLikeToParse)) {
           var sumToParse = sumLikeToParse;
@@ -638,6 +652,7 @@ function parseSentence(command) {
           paramArray.push(parsedSum);
         }
       }
+      //heitetaanko tassa vaan kaikki menemaan?
       rest = rest.slice(endIndexExclusive + 1);
       continue;
     }
@@ -799,7 +814,7 @@ function runCommandString(userInput) {
   }
   if (userInput === undefined) {
     var undefinedMsg = {
-      label: '[FAIL]',
+      label: fail,
       text: "undefined input",
       rowClass: 'error'
     };
