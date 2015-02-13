@@ -1,3 +1,5 @@
+/* time.js */
+
 function Clock() {
   this.seconds = 0;
   this.minutes = 0;

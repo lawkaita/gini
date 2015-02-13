@@ -1,3 +1,5 @@
+/* main.js */
+
 var greeting = document.querySelector('#greeting');
 //var input = document.querySelector('#mainInput');
 var input = document.getElementById('inputArea');

@@ -1,8 +1,12 @@
+/*parser.js*/
+
 var diceRegex = /^\b([1-9][0-9]{0,2})?d([1-9][0-9]{0,2})\b$/;
 var alphaNumericCharacterRegex = /\b\w\b/;
+var synErrLabel = "[SYNTAX ERROR]";
+var synErrClass = 'syntaxError';
 var syntaxErrorMsg = {
-  label: "[SYNTAX ERROR]",
-  rowClass: 'syntaxError'
+  label: synErrLabel,
+  rowClass: synErrClass
 };
 var areYouSureMsg = {
   text: "ARE YOU SURE? (y/n)",
@@ -211,7 +215,12 @@ function clearCommand(params) {
   if (param === 'console') {
     return clearConsoleCommand();
   }
-  return syntaxErrorMsg;
+  var customSynErrMsg = {
+    text: "@clearCommand",
+    label: fail,
+    rowClass: 'error'
+  }
+  return customSynErrorMsg;
 }
 
 function clearEncounterCommand(sure) {
@@ -653,6 +662,9 @@ function parseSentence(command) {
         }
       }
       //heitetaanko tassa vaan kaikki menemaan?
+      //littyykö tämä tyhjiin välilyönteihin?
+      //  -> pushataan rest
+      paramArray.push(rest);
       rest = rest.slice(endIndexExclusive + 1);
       continue;
     }
@@ -823,11 +835,21 @@ function runCommandString(userInput) {
   var trimmed = userInput.trim();
   var parsed = parse(trimmed);
   if (parsed === undefined) {
-    return syntaxErrorMsg;
+    var customSynErrMsg = {
+      text: "@runCommandString: 'parse' returned undefined",
+      label: synErrLabel,
+      rowClass: synErrClass
+    }
+    return customSynErrMsg;
   }
   var result = runParsed(parsed);
   if (result === undefined) {
-    return syntaxErrorMsg;
+    var customSynErrMsg = {
+      text: "runCommandString: 'runParsed' returned undefined",
+      label: synErrLabel,
+      rowClass: synErrClass
+    } 
+    return customSynErrMsg;
   }
   if(isNumber(result)) {
     calc.setAns(result);

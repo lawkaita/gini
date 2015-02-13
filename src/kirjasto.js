@@ -1,3 +1,5 @@
+/* kirjasto.js */
+
 var database = [];
 var customVars = [];
 var initiativeIndex;

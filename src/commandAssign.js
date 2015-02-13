@@ -1,3 +1,5 @@
+/* commandAssign.js */
+
 function CommandAssigner() {
   this.target = send;
 }

@@ -1,3 +1,5 @@
+/* math.js */
+
 function Calculator() {
   this.ans = 0;
 }
