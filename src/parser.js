@@ -116,7 +116,7 @@ function getHost(params) {
   }
   var matched = matchArray[0];
   var msgToReturn = {
-    text: "http://drive.google.com/uc?export=view&id=" + matched,
+    text: "https://drive.google.com/uc?export=view&id=" + matched,
     rowClass: 'url'
   } 
   return msgToReturn;
