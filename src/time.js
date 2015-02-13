@@ -29,15 +29,14 @@ function tickerSecondPassed() {
 
   if(this.tick !== 0) {
     if (this.seconds === (Math.floor(this.tick/2))) {
-      audioHalf.play();
+      bzz.play();
     }
 
     if (this.seconds === Math.floor(this.tick*(3/4))) {
-      audioHurry.play();
+      bzz3.play();
     }
 
     if (this.seconds === (this.tick - 7)){
-      audioLastSeven.play();
     }
 
     if (this.seconds >= this.tick) {
@@ -185,24 +184,33 @@ turnTracker.turnPassed = turnTrackerTurnPassed;
 clock.takeToInvoke(ticker);
 clock.takeToInvoke(turnTracker);
 
-var audioHalf = null;
-var audioHurry = null;
-var audioLastSeven = null;
-
+var bzz = null;
+var bzz3 = null;
+var bzzOver = null;
+var bzzp1 = null;
+var bzzp2 = null;
+var audioArr = [];
 var globalVolumeNumber = 0.5;
 
 function loadSound() {
-  audioHalf = document.getElementById("half");
-  audioHurry = document.getElementById("hurry");
-  audioLastSeven = document.getElementById("last7");
+  bzz = document.getElementById("bzz");
+  bzz3 = document.getElementById("bzz3");
+  bzzOver = document.getElementById("bzzOver");
+  bzzp1 = document.getElementById("bzzp1");
+  bzzp2 = document.getElementById("bzzp2");
+  audioArr.push(bzz);
+  audioArr.push(bzz3);
+  audioArr.push(bzzOver);
+  audioArr.push(bzzp1);
+  audioArr.push(bzzp2);
   assignVolumeToAudio(globalVolumeNumber);
 }
 
 function assignVolumeToAudio(volume) {
   globalVolumeNumber = volume;
-  audioHalf.volume = volume;
-  audioHurry.volume = volume;
-  audioLastSeven.volume = volume;
+  audioArr.map(function(audioVar) {
+    audioVar.volume = volume;
+  });
 }
 
 function setVolume(volume) {
@@ -216,7 +224,7 @@ function setVolume(volume) {
   }
 
   assignVolumeToAudio(volume);
-  audioHalf.play();
+  bzz.play();
 
   return msg = {
     label: ok,
