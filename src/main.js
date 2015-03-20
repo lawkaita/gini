@@ -6,6 +6,7 @@ var input = document.getElementById('inputArea');
 var recentCommands = [];
 var rci = new RecentCommandIterator();
 var charWidth = 7;
+var devMode = false;
 
 function init() {
   console.log(input);
