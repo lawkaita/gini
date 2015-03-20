@@ -30,6 +30,7 @@ var verbs = {
 	"next": nextCommand,
 	"drive": getHost,
 	"var": varCommand,
+	"dev": devmodeCommand,
 
 	//clock
 	"tick": tickCommand,
@@ -304,13 +305,13 @@ function devmodeCommand(params) {
 	var onOrOffString = params[0];
 	if (onOrOffString === undefined) {
 		var devModeIsOnString = 'off';
-		if (devMode = true) {
+		if (devMode === true) {
 			devModeIsOnString = 'on';
 		}
 		var msg = {
 			label: ok,
-			text: "devmode is currently" + devModeIsOnString,
-			label: 'soutRow'
+			text: "devmode is currently " + devModeIsOnString,
+			rowClass: 'soutRow'
 		}
 		return msg;
 	}
@@ -319,7 +320,7 @@ function devmodeCommand(params) {
 		var msg = {
 			label: ok,
 			text: "devmode on",
-			label: 'soutRow'
+			rowClass: 'soutRow'
 		}
 		return msg;
 	}
@@ -328,11 +329,10 @@ function devmodeCommand(params) {
 		var msg = {
 			label: ok,
 			text: "devmode off",
-			label: 'soutRow
+			rowClass: 'soutRow'
 		}
 	}
 }
-
 
 function overtimeCommand(params) {
 	var onOrOffString = params[0];
@@ -695,10 +695,22 @@ function parseSentence(command) {
 					paramArray.push(parsedSum);
 				}
 			}
+			//tähän päädytään, jos sumlikeToParseSplitted[1]
+			//	ei ole matikkaa.
+			//		EI!!!
+			//
+			//Tähän päädytään aina!
+			//	tähän PÄÄDYTTÄESSÄ voi olla niin että
+			//		sumliketoparseSplitted[1] ei vain käsitellä. 
+			//	Onko olemassa tilannetta
+			//		"olennaista + lisää..."
+			//	jossa pudotetaan tuo olennaista pois?
+			//
+			//vanhempaa ajatusta:
 			//heitetaanko tassa vaan kaikki menemaan?
 			//littyykö tämä tyhjiin välilyönteihin?
 			//	-> pushataan rest
-			paramArray.push(rest);
+			//paramArray.push(rest);
 			rest = rest.slice(endIndexExclusive + 1);
 			continue;
 		}
@@ -850,7 +862,22 @@ function checkParamsLegality(commandName, params) {
 	return syntaxCheckFunction(params);
 }
 
+function explain(input) {
+     sout(input);
+     sout("isSumLike returned " + isSumLike(input));
+     sout("isSentence returned " + isSentence(input));
+     //var parsed = parse(input.trim());
+     //var parsedAsString = 
+}
+
+function parsedToText(parsed) {
+	var toRetrun = "";
+}
+
 function runCommandString(userInput) {
+	if (devMode === true) {
+		explain(userInput);
+	}
 	if (/;/.test(userInput)) {
 		var commands = userInput.split(';');
 		for (var i in commands) {
