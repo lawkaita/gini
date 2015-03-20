@@ -36,7 +36,16 @@ function tickerSecondPassed() {
       bzz3.play();
     }
 
-    if (this.seconds === (this.tick - 7)){
+    if (this.seconds === (this.tick - 3)){
+      bzz.play();
+    }
+
+    if (this.seconds === (this.tick - 2)) {
+      bzzp1.play();
+    }
+
+    if (this.seconds === (this.tick - 1)) {
+      bzzp2.play();
     }
 
     if (this.seconds >= this.tick) {
