@@ -153,10 +153,10 @@ Clock.prototype.outWrite = function() {
 	var timePerTurn = timeFormat(minutesPerTurn) + ":" + timeFormat(secondsPerTurn);
 
 	var toReturn = "last turn time	= " + turnTime 
-		+ "\n" + "total time		= " + totalTime 
-		+ "\n" + "turns played		= " + turnTracker.turns 
-		+ "\n" + "rounds played		= " + turnTracker.rounds 
-		+ "\n" + "time per turn		= " + timePerTurn;
+		+ "\n" + "total time	= " + totalTime 
+		+ "\n" + "turns played	= " + turnTracker.turns 
+		+ "\n" + "rounds played	= " + turnTracker.rounds 
+		+ "\n" + "time per turn	= " + timePerTurn;
 
 	return toReturn;
 }
