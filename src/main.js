@@ -4,10 +4,10 @@ var greeting = document.querySelector('#greeting');
 //var input = document.querySelector('#mainInput');
 var input = document.getElementById('inputArea');
 var recentCommands = [];
-var vars = [];
+var vars = {};
 var rci = new RecentCommandIterator();
 var charWidth = 7;
-var devMode = true;
+var devMode = false;
 
 function init() {
 	console.log(input);

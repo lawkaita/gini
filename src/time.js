@@ -3,10 +3,12 @@
 function Clock() {
 	this.seconds = 0;
 	this.minutes = 0;
+	this.hours = 0;
 
 	this.isOn = false;
 	this.battery;
 	this.toInvoke = [];
+	this.toInvokeHourly = [];
 }
 
 Clock.prototype.secondPassed = function() {
@@ -18,6 +20,13 @@ Clock.prototype.secondPassed = function() {
 		}
 		for (var i in this.toInvoke) {
 			this.toInvoke[i].secondPassed();
+		}
+		if (this.minutes === 60) {
+			this.minutes = 0;
+			this.hours++;
+			for (var i in this.toInvokeHourly) {
+				this.toInvokeHourly[i].hourPassed(this.hours);
+			}
 		}
 		return true;
 	}
@@ -143,6 +152,14 @@ function setOverTime(bool) {
 	return this.getOverTimeMsg();
 }
 
+var hourTrackerWrapper = {
+	hourPassed: hourTracker
+}
+
+function hourTracker(hour) {
+	printText("[TIME]: you have been playing " + hour + " hours.", 'devRow' );
+}
+
 Clock.prototype.outWrite = function() {
 	var totalTime = timeFormat(this.minutes) + ":" + timeFormat(this.seconds);
 	var turnTime = timeFormat(turnTracker.minutes) + ":" + timeFormat(turnTracker.seconds);
@@ -187,6 +204,7 @@ turnTracker.turnPassed = turnTrackerTurnPassed;
 clock.takeToInvoke(ticker);
 clock.takeToInvoke(turnTracker);
 mainClock.takeToInvoke(clock);
+mainClock.toInvokeHourly.push(hourTrackerWrapper);
 
 var bzz = null;
 var bzz3 = null;
