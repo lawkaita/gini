@@ -118,7 +118,7 @@ function getHost(params) {
 	var matched = matchArray[0];
 	var msgToReturn = {
 		text: "https://drive.google.com/uc?export=view&id=" + matched,
-		rowClass: 'url'
+		rowClass: 'urlRow'
 	} 
 	return msgToReturn;
 }
@@ -309,9 +309,9 @@ function devmodeCommand(params) {
 			devModeIsOnString = 'on';
 		}
 		var msg = {
-			label: ok,
+			label: "[DEV]",
 			text: "devmode is currently " + devModeIsOnString,
-			rowClass: 'soutRow'
+			rowClass: 'devRow'
 		}
 		return msg;
 	}
@@ -320,7 +320,7 @@ function devmodeCommand(params) {
 		var msg = {
 			label: ok,
 			text: "devmode on",
-			rowClass: 'soutRow'
+			rowClass: 'devRow'
 		}
 		return msg;
 	}
@@ -329,8 +329,9 @@ function devmodeCommand(params) {
 		var msg = {
 			label: ok,
 			text: "devmode off",
-			rowClass: 'soutRow'
+			rowClass: 'devRow'
 		}
+		return msg;
 	}
 }
 
@@ -693,7 +694,15 @@ function parseSentence(command) {
 					var parsedSum = parseSum(sumToParse);
 					paramArray.push(sumLikeToParseSplitted[0]);
 					paramArray.push(parsedSum);
+				} else {
+					var msg = {
+						label: "[DEV]",
+						text: "reached parser.js/parseSentence: sumlikeToParseSplitted[1] = '" + sumLikeToParse + "' is not math; see rows 690-700",
+						rowClass: 'devRow'
+					}
+					printOutputmsgs(msg);
 				}
+					
 			}
 			//t‰h‰n p‰‰dyt‰‰n, jos sumlikeToParseSplitted[1]
 			//	ei ole matikkaa.
@@ -863,11 +872,11 @@ function checkParamsLegality(commandName, params) {
 }
 
 function explain(input) {
-     sout(input);
-     sout("isSumLike returned " + isSumLike(input));
-     sout("isSentence returned " + isSentence(input));
-     //var parsed = parse(input.trim());
-     //var parsedAsString = 
+	var output = "isSumLike returned " + isSumLike(input)
+	     + "\n" + "isSentence returned " + isSentence(input);
+	printText(output, 'devRow');
+	//var parsed = parse(input.trim());
+	//var parsedAsString = 
 }
 
 function parsedToText(parsed) {

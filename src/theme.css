@@ -211,6 +211,20 @@ h1 {
   padding: 0;
 }
 
+.devRow {
+  color: #FF0066;
+
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
+.urlRow {
+  border: 0px;
+  margin: 1px 0 0 3px;
+  padding: 0;
+}
+
 .syntaxError {
   color: orange;
   border: 0px;
