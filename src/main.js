@@ -4,6 +4,7 @@ var greeting = document.querySelector('#greeting');
 //var input = document.querySelector('#mainInput');
 var input = document.getElementById('inputArea');
 var recentCommands = [];
+var vars = [];
 var rci = new RecentCommandIterator();
 var charWidth = 7;
 var devMode = true;
@@ -22,11 +23,18 @@ function init() {
 	initWindow();
 	loadSound();
 	declareFontSize();
+	startClock();
 	input.focus();
 }
 
 function loadSession() {
 	database = load();
+}
+
+function startClock() {
+	mainClock.start();
+	var now = Date();
+	printText(now);
 }
 
 function declareFontSize() {

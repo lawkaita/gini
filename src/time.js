@@ -10,44 +10,37 @@ function Clock() {
 }
 
 Clock.prototype.secondPassed = function() {
-	this.seconds++;
-
-	if (this.seconds === 60) {
-		this.seconds = 0;
-		this.minutes++;
+	if (this.isOn) {
+		this.seconds++;
+		if (this.seconds === 60) {
+			this.seconds = 0;
+			this.minutes++;
+		}
+		for (var i in this.toInvoke) {
+			this.toInvoke[i].secondPassed();
+		}
+		return true;
 	}
-
-	for (var i in this.toInvoke) {
-		this.toInvoke[i].secondPassed();
-	}
-
-	return true;
 }
 
 function tickerSecondPassed() {
 	this.seconds++;
-
 	if(this.tick !== 0) {
 		if (this.seconds === (Math.floor(this.tick/2))) {
 			bzz.play();
 		}
-
 		if (this.seconds === Math.floor(this.tick*(3/4))) {
 			bzz3.play();
 		}
-
 		if (this.seconds === (this.tick - 3)){
 			bzz.play();
 		}
-
 		if (this.seconds === (this.tick - 2)) {
 			bzzp1.play();
 		}
-
 		if (this.seconds === (this.tick - 1)) {
 			bzzp2.play();
 		}
-
 		if (this.seconds >= this.tick) {
 			if (!this.overTime) {
 				this.seconds = 0;
@@ -159,11 +152,11 @@ Clock.prototype.outWrite = function() {
 	var secondsPerTurn = totalSecondsPerTurn - minutesPerTurn*60;
 	var timePerTurn = timeFormat(minutesPerTurn) + ":" + timeFormat(secondsPerTurn);
 
-	var toReturn =	"last turn time = " + turnTime + "\n"
-								+ "total time		 = " + totalTime + "\n"
-								+ "turns played	 = " + turnTracker.turns + "\n"
-								+ "rounds played	= " + turnTracker.rounds + "\n"
-								+ "time per turn	= " + timePerTurn;
+	var toReturn = "last turn time	= " + turnTime 
+		+ "\n" + "total time		= " + totalTime 
+		+ "\n" + "turns played		= " + turnTracker.turns 
+		+ "\n" + "rounds played		= " + turnTracker.rounds 
+		+ "\n" + "time per turn		= " + timePerTurn;
 
 	return toReturn;
 }
@@ -176,6 +169,7 @@ function timeFormat(unit) {
 	return "" + unit;
 }
 
+var mainClock = new Clock();
 var clock = new Clock();
 var ticker = new Clock();
 var turnTracker = new Clock();
@@ -192,6 +186,7 @@ turnTracker.secondPassed = turnTrackerSecondPassed;
 turnTracker.turnPassed = turnTrackerTurnPassed;
 clock.takeToInvoke(ticker);
 clock.takeToInvoke(turnTracker);
+mainClock.takeToInvoke(clock);
 
 var bzz = null;
 var bzz3 = null;

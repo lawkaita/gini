@@ -279,7 +279,7 @@ function unremarkCommand(params) {
 
 function nextCommand() {
 	if(!clock.isOn) {
-		clock.start();
+		clock.isOn = true;
 	}
 	ticker.zeroTick();
 	nextInitiativeIndex();
@@ -351,7 +351,7 @@ function overtimeCommand(params) {
 }
 
 function pauseCommand() {
-	clock.stop();
+	clock.isOn = false;
 	return okmsg;
 }
 
