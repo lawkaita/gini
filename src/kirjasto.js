@@ -29,41 +29,41 @@ function save() {
 function load() {
 	seiviJson = localStorage.getItem('munSeivi');
 	if (seiviJson === null) {
-	return [];
+		return [];
 	} else {
-	seivi = JSON.parse(seiviJson);
-	asia = seivi['asia'];
-	//console.log(asia);
-	return asia;
+			seivi = JSON.parse(seiviJson);
+		asia = seivi['asia'];
+		//console.log(asia);
+		return asia;
 	}
 }
 
 function addCreature(name, initiative, hp) {
 	if (creatureWithNameExists(name)) {
-	var msg = {
-		label: fail,
-		text: "creature with name exists",
-		rowClass: 'error'
-	};
-	return msg;
+		var msg = {
+			label: fail,
+			text: "creature with name exists",
+			rowClass: 'error'
+		};
+		return msg;
 	}
 	
 	if(hp == 0) {
-	var msg = {
-		label: fail,
-		text: "hp cannot be zero",
-		rowClass: 'error',
-	}
-	return msg;
+		var msg = {
+			label: fail,
+			text: "hp cannot be zero",
+			rowClass: 'error',
+		}
+		return msg;
 	}
 	
 	var creature = {
-	id: nextCreatureId,
-	name: name,
-	inikka: initiative,
-	hp: hp, 
-	maxHp: hp,
-	 remarks: []
+		id: nextCreatureId,
+		name: name,
+		inikka: initiative,
+		hp: hp, 
+		maxHp: hp,
+		remarks: []
 	};
 	database.push(creature);
 	nextCreatureId++;
@@ -148,9 +148,9 @@ function unhighlightCreatureRow(index) {
 function deleteCreatureByName(name) {
 	var index = getCreatureIndex(name, 'name');
 	if(index !== undefined) {
-	deleteCreatureFromIndex(index);
-	updateUi();
-	return okmsg;
+		deleteCreatureFromIndex(index);
+		updateUi();
+		return okmsg;
 	}
 	return noCreatureWithNameMsg;
 }
@@ -158,7 +158,7 @@ function deleteCreatureByName(name) {
 function changeCreatureInitiativeByName(name, initiative) {
 	var index = getCreatureIndex(name, 'name');
 	if (index === undefined) {
-	return noCreatureWithNameMsg;
+		return noCreatureWithNameMsg;
 	}
 	database[index].inikka = initiative;
 	updateUi();
@@ -167,20 +167,20 @@ function changeCreatureInitiativeByName(name, initiative) {
 
 function damageCreatureByName(name, dmg) {
 	var index = getCreatureIndex(name, 'name');
-	if (index === undefined) {
-	return noCreatureWithNameMsg;
+		if (index === undefined) {
+		return noCreatureWithNameMsg;
 	}
 	var creature = database[index];
 	if (creature.hp === "-") {
-	creature.hp = -dmg;
+		creature.hp = -dmg;
 	} else {
-	creature.hp = creature.hp - dmg;
+		creature.hp = creature.hp - dmg;
 	}
 	updateUi();
 	var msgToReturn = {
-	label: ok,
-	text: creature.name + " suffered " + dmg + " damage",
-	rowClass: "soutRow"
+		label: ok,
+		text: creature.name + " suffered " + dmg + " damage",
+		rowClass: "soutRow"
 	}
 	return msgToReturn;
 }
@@ -188,15 +188,15 @@ function damageCreatureByName(name, dmg) {
 function remarkCreature(name, remark) {
 	var index = getCreatureIndex(name, 'name');
 	if (index === undefined) {
-	return noCreatureWithNameMsg;
+		return noCreatureWithNameMsg;
 	}
 	var creature = database[index];
 	var remarks = creature.remarks;
 	var remarkIndex = getRemarkIndex(remarks, remark);
 	if(remarkIndex === undefined) {
-	remarks.push(remark);
-	updateUi();
-	return okmsg;
+		remarks.push(remark);
+		updateUi();
+		return okmsg;
 	} else {
 	var msg = {
 		label: fail,
@@ -210,14 +210,14 @@ function remarkCreature(name, remark) {
 function unremarkCreature(name, remark) {
 	var index = getCreatureIndex(name, 'name');
 	if (index === undefined) {
-	return noCreatureWithNameMsg;
+		return noCreatureWithNameMsg;
 	}
 	var creature = database[index];
 	var remarks = creature.remarks;
 	if (remark === 'all') {
-	creature.remarks = [];
-	updateUi();
-	return okmsg;
+		creature.remarks = [];
+		updateUi();
+		return okmsg;
 	}
 	var remarkIndex = getRemarkIndex(remarks, remark);
 	if (remarkIndex === undefined) {
