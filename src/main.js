@@ -78,7 +78,7 @@ RecentCommandIterator.prototype.getCommand = function () {
 }
 
 function keypress(event) {
-	console.log(event);
+	//console.log(event);
 	if (event.keyCode === 38) {
 		event.preventDefault();
 		input.value = rci.moveUp();

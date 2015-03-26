@@ -91,7 +91,7 @@ function tickerSecondPassed() {
 
 var overtimeTracker = [];
 function initiateOvertimeCount() {
-	var currentIndex = initiativeIndex;
+	var currentIndex = turnNumber;
 	var creatureOvertimeClock = overtimeTracker[currentIndex];
 	if (creatureOvertimeClock === undefined) {
 		creatureOvertimeClock = new Clock();
@@ -113,7 +113,7 @@ function turnTrackerTurnPassed() {
 	this.turns++;
 	this.seconds = 0;
 	this.minutes = 0;
-	if (initiativeIndex === database.length - 1) {
+	if (turnNumber === database.length - 1) {
 		this.rounds++;
 	}
 }

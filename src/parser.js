@@ -282,7 +282,7 @@ function nextCommand() {
 		combatClock.isOn = true;
 	}
 	ticker.zeroTick();
-	nextInitiativeIndex();
+	nextTurnNumber();
 	updateUi();
 	var toReturn = combatClock.outWrite();
 	turnTracker.turnPassed();

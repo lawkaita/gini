@@ -2,7 +2,7 @@
 
 var database = [];
 var customVars = [];
-var initiativeIndex;
+var turnNumber = undefined;
 var nextCreatureId = 0;
 var ok = "[OK]";
 var fail = "[FAIL]";
@@ -31,10 +31,30 @@ function load() {
 	if (seiviJson === null) {
 		return [];
 	} else {
-			seivi = JSON.parse(seiviJson);
+		seivi = JSON.parse(seiviJson);
 		asia = seivi['asia'];
 		//console.log(asia);
 		return asia;
+	}
+}
+
+function getCreatureIdByTurnNumber() {
+	if (database.length > 0) {
+		var sortedCreatures = sortByInitiative(database);
+		var creatureByTurnNumber = sortedCreatures[turnNumber];
+		var creatureId = creatureByTurnNumber['id'];
+		return creatureId;
+	}
+}
+
+function getTurnNumberByCreatureId(id) {
+	var sortedCreatures = sortByInitiative(database);
+	for (var i in sortedCreatures) {
+		var creature = sortedCreatures[i];
+		var creatureId = creature['id'];
+		if (creatureId === id) {
+			return i;
+		}
 	}
 }
 
@@ -65,7 +85,14 @@ function addCreature(name, initiative, hp) {
 		maxHp: hp,
 		remarks: []
 	};
-	database.push(creature);
+
+	if(turnNumber === undefined) {
+		database.push(creature);
+	} else {
+		var idInTurn = getCreatureIdByTurnNumber();
+		database.push(creature);
+		turnNumber = getTurnNumberByCreatureId(idInTurn);
+	}
 	nextCreatureId++;
 	return okmsg;
 }
@@ -124,16 +151,13 @@ function initWindow() {
 	foo.appendChild(text);
 }
 
-function nextInitiativeIndex() {
-	switch(true) {
-	case (initiativeIndex === undefined):
-		initiativeIndex = 0;
-		break;
-	case (initiativeIndex >= database.length - 1):
-		initiativeIndex = 0;
-		break;
-	default:
-		initiativeIndex++;
+function nextTurnNumber() {
+	if (turnNumber === undefined) {
+		turnNumber = 0;
+	} else if (turnNumber >= database.length - 1) {
+		turnNumber = 0;
+	} else {
+		turnNumber++;
 	}
 }
 
@@ -148,9 +172,24 @@ function unhighlightCreatureRow(index) {
 function deleteCreatureByName(name) {
 	var index = getCreatureIndex(name, 'name');
 	if(index !== undefined) {
-		deleteCreatureFromIndex(index);
+		if (turnNumber === undefined) {
+			deleteCreatureFromIndex(index);
+		} else {
+			var indexAsInt = parseInt(index);
+			var creatureToDelete = database[indexAsInt];
+			var creatureToDeleteId = creatureToDelete['id'];
+			var idInTurn = getCreatureIdByTurnNumber();
+			var toReturn = okmsg;
+			if (idInTurn === creatureToDeleteId) {
+				//printLine("0",'devRow');
+				toReturn = nextCommand();
+				idInTurn = getCreatureIdByTurnNumber();
+			}
+			deleteCreatureFromIndex(index);
+			turnNumber = getTurnNumberByCreatureId(idInTurn);
+		}
 		updateUi();
-		return okmsg;
+		return toReturn;
 	}
 	return noCreatureWithNameMsg;
 }
@@ -159,8 +198,18 @@ function changeCreatureInitiativeByName(name, initiative) {
 	var index = getCreatureIndex(name, 'name');
 	if (index === undefined) {
 		return noCreatureWithNameMsg;
+	} else {
+		creatureToInit = database[index];
+		var creatureToInitId = creatureToInit['id'];
+		var idInTurn = getCreatureIdByTurnNumber();
+		var toReturn = okmsg;
+		if (idInTurn === creatureToInitId) {
+			toReturn = nextCommand();
+			idInTurn = getCreatureIdByTurnNumber();
+		}
 	}
 	database[index].inikka = initiative;
+	turnNumber = getTurnNumberByCreatureId(idInTurn);
 	updateUi();
 	return okmsg;
 }
@@ -198,12 +247,12 @@ function remarkCreature(name, remark) {
 		updateUi();
 		return okmsg;
 	} else {
-	var msg = {
-		label: fail,
-		text: "creature already has this mark",
-		rowClass: 'error'
-	};
-	return msg;
+		var msg = {
+			label: fail,
+			text: "creature already has this mark",
+			rowClass: 'error'
+		};
+		return msg;
 	}
 }
 
@@ -221,12 +270,12 @@ function unremarkCreature(name, remark) {
 	}
 	var remarkIndex = getRemarkIndex(remarks, remark);
 	if (remarkIndex === undefined) {
-	var msg = {
-		label: fail,
-		text: "creature does not have this mark",
-		rowClass: 'error'
-	};
-	return msg;
+		var msg = {
+			label: fail,
+			text: "creature does not have this mark",
+			rowClass: 'error'
+		};
+		return msg;
 	}
 	remarks.splice(remarkIndex, 1);
 	updateUi();
@@ -276,7 +325,7 @@ function createRemarkSmall(remarks) {
 	var remarkStr = "";
 
 	for (var i = 0; i < remarks.length; i++) {
-	remarkStr = remarkStr + remarks[i] + ", ";
+		remarkStr = remarkStr + remarks[i] + ", ";
 	}
 
 	remarkStr = remarkStr.slice(0, remarkStr.length-2);
@@ -421,7 +470,7 @@ function createUi(creatures) {
 		var creature = sortedCreatures[i];
 		var testRow = createRow(creature);
 		
-		if (i == initiativeIndex) {
+		if (i == turnNumber) {
 			testRow.setAttribute('class', 'selectedRow');
 		} else {
 			testRow.setAttribute('class', 'notSelectedRow');
