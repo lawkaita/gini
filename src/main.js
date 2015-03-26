@@ -32,6 +32,7 @@ function loadSession() {
 }
 
 function startClock() {
+	initClock();
 	mainClock.start();
 	var now = Date();
 	printText(now);
