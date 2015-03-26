@@ -32,7 +32,7 @@ var verbs = {
 	"var": varCommand,
 	"dev": devmodeCommand,
 
-	//clock
+	//combatClock
 	"tick": tickCommand,
 	"overtime": overtimeCommand,
 	"pause": pauseCommand,
@@ -237,7 +237,7 @@ function clearEncounterCommand(sure) {
 		return areYouSureMsg;
 	}
 	database = [];
-	clock = new Clock();
+	resetCombatClock();
 	updateUi();
 	initiativeIndex = undefined;
 	return okmsg;
@@ -278,13 +278,13 @@ function unremarkCommand(params) {
 }
 
 function nextCommand() {
-	if(!clock.isOn) {
-		clock.isOn = true;
+	if(!combatClock.isOn) {
+		combatClock.isOn = true;
 	}
 	ticker.zeroTick();
 	nextInitiativeIndex();
 	updateUi();
-	var toReturn = clock.outWrite();
+	var toReturn = combatClock.outWrite();
 	turnTracker.turnPassed();
 	return toReturn;
 }
@@ -351,12 +351,12 @@ function overtimeCommand(params) {
 }
 
 function pauseCommand() {
-	clock.isOn = false;
+	combatClock.isOn = false;
 	return okmsg;
 }
 
 function continueCommand() {
-	clock.start();
+	combatClock.start();
 	return okmsg;
 }
 
