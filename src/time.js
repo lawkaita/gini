@@ -217,13 +217,6 @@ function initClock() {
 	mainClock.toInvokeHourly.push(hourTrackerWrapper);
 }
 
-function testClock() {
-	if (mainClock.toInvoke[0] !== combatClock) {
-		return false;
-	}
-	return true;
-}
-
 function resetCombatClock() {
 	combatClock.isOn = false;
 	combatClock.resetTime();
