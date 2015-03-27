@@ -7,3 +7,12 @@ function testClock() {
 	return true;
 }
 
+var asd = 1;
+
+/*
+function asdD() {
+	asd = asd+1;
+}
+
+asdD();
+*/

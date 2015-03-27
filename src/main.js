@@ -19,20 +19,67 @@ function init() {
 	var mainInput = document.getElementById('mainInput');
 	mainInput.addEventListener('keydown', keypress);
 	*/
-	loadSession();
+	var saveWasFound = loadSession();
 	initWindow();
 	loadSound();
 	declareFontSize();
+	if (saveWasFound) {
+		loadClock();
+	}
 	startClock();
+	if (saveWasFound) {
+		var msg = {
+			text: combatClock.outWrite(),
+			rowClass: 'soutRow'
+		}
+		printOutputmsgs(msg);
+	}
 	input.focus();
 }
 
+function loadClock() {
+	savedCombatClock = saveState['combatClock'];
+	combatClock = new Clock();
+	combatClock.setTime(savedCombatClock);
+
+	savedTicker = saveState['ticker'];
+	ticker = new Clock();
+	ticker.setTime(savedTicker);	
+
+	savedTurnTracker = saveState['turnTracker'];
+	turnTracker = new Clock();
+	turnTracker.setTime(savedTurnTracker);
+	turnTracker.turns = savedTurnTracker.turns;
+	turnTracker.rounds = savedTurnTracker.rounds;
+
+	setClockOptionsDefault();
+}
+
 function loadSession() {
-	database = load();
+	saveState = load();
+	if (saveState === null) {
+		initSaveStateVars();
+		newClocks();
+		setClockOptionsDefault();
+		initTurnTracker();
+		return false;
+	} else {
+		database = saveState['database'];
+		turnNumber = saveState['turnNumber'];
+		nextCreatureId = saveState['nextCreatureId'];
+		return true;
+	}
 }
 
 function startClock() {
-	initClock();
+	mainClock = new Clock();
+	console.log("combatClock: " + combatClock);
+	console.log("turnTracker: " + turnTracker);
+	console.log("undefined: " + undefined);
+	console.log("CC.takeToInvoke: " + combatClock.takeToInvoke);
+	console.log("ttSecondPassed: " + turnTrackerSecondPassed);
+	console.log("ilmeisesti tallennus ei s‰‰st‰ t‰ss‰ muodossa ainakaan objektien funktioita");
+	buildClockHierarchy();
 	mainClock.start();
 	var now = Date();
 	printText(now);
@@ -228,7 +275,7 @@ function soutMath(line) {
 
 function printLine(line, rowClass) {
 	var textRows = document.querySelector('#textRows');
-	var div =	document.createElement('div');
+	var div = document.createElement('div');
 	var divClass;
 	if (rowClass === undefined) {
 		divClass = 'textRow';
@@ -276,3 +323,11 @@ function scrollDown(myDiv) {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+/*
+function asdD() {
+	asd = asd+1;
+}
+
+asdD();
+*/

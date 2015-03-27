@@ -1,9 +1,12 @@
 /* kirjasto.js */
 
-var database = [];
-var customVars = [];
-var turnNumber = undefined;
-var nextCreatureId = 0;
+function initSaveStateVars() {
+	database = [];
+	turnNumber = undefined;
+	nextCreatureId = 0;
+	saveState = {};
+}
+
 var ok = "[OK]";
 var fail = "[FAIL]";
 var okmsg = {
@@ -16,12 +19,21 @@ var noCreatureWithNameMsg = {
 	rowClass: 'error'
 }
 
+function writeSave() {
+	saveState['database'] = database;
+	saveState['turnNumber'] = turnNumber;
+	saveState['nextCreatureId'] = nextCreatureId;
+	saveState['combatClock'] = combatClock;
+	saveState['ticker'] = ticker;
+	saveState['turnTracker'] = turnTracker;
+}
 //pysyv‰mm‰n tallennuksen lyhyt oppim‰‰r‰
 // tallentaminen
 function save() {
-	var asia = database;
+	//var asia = database;
+	writeSave();
 	var seivi = {};
-	seivi['asia'] = asia;
+	seivi['asia'] = saveState;
 	jsonSeivi = JSON.stringify(seivi);
 	localStorage.setItem('munSeivi', jsonSeivi);
 }
@@ -29,11 +41,10 @@ function save() {
 function load() {
 	seiviJson = localStorage.getItem('munSeivi');
 	if (seiviJson === null) {
-		return [];
+		return null;
 	} else {
 		seivi = JSON.parse(seiviJson);
 		asia = seivi['asia'];
-		//console.log(asia);
 		return asia;
 	}
 }
@@ -98,6 +109,62 @@ function addCreature(name, initiative, hp) {
 }
 
 function initWindow() {
+	//addCreature('Aboleth', 12, 100);
+	//addCreature('uthal', 5, 6);
+	//addCreature('kobold123', 36, 77);
+
+	var foo = document.querySelector("#creaturesWindow");
+	
+	var bar = document.createElement('tr');
+	bar.setAttribute('class', 'creatureTableColumnNames');
+	
+	var baz = document.createElement('table');
+	baz.setAttribute('class', 'columnNamesRow');
+
+	var nameCell = document.createElement('td');
+	var nameText = document.createTextNode('name');
+	var nameDiv = document.createElement('div');
+	nameDiv.appendChild(nameText);
+	nameDiv.setAttribute('style', 'max-width: 140px');
+	nameCell.setAttribute('class', 'nameColumn');
+	nameCell.appendChild(nameDiv);
+	
+	var initCell = document.createElement('td');
+	var initText = document.createTextNode('init');
+	initCell.setAttribute('class', 'numberColumn');
+	initCell.appendChild(initText);
+	
+	var hpCell = document.createElement('td');
+	var hpText = document.createTextNode('hp/maxHp');
+	hpCell.setAttribute('class', 'numberColumn');
+	hpCell.appendChild(hpText);
+	
+	var hpPerCell = document.createElement('td');
+	var hpPerText = document.createTextNode('hp %');
+	hpPerCell.setAttribute('class', 'numberColumn');
+	hpPerCell.appendChild(hpPerText);
+	
+	/*
+	var addRemoveCell = document.createElement('td');
+	var addRemoveText = document.createTextNode('add/remove');
+	addRemoveCell.setAttribute('class', 'numberColumn');
+	addRemoveCell.appendChild(addRemoveText);
+	*/
+	
+	bar.appendChild(nameCell);
+	bar.appendChild(initCell);
+	bar.appendChild(hpCell);
+	bar.appendChild(hpPerCell);
+	//bar.appendChild(addRemoveCell);
+	
+	baz.appendChild(bar);
+	foo.appendChild(baz);
+	
+	var text = createUi(database);
+	foo.appendChild(text);
+}
+
+function initWindow_old() {
 	//addCreature('Aboleth', 12, 100);
 	//addCreature('uthal', 5, 6);
 	//addCreature('kobold123', 36, 77);
@@ -368,7 +435,8 @@ function createRow(creature) {
 	var hpPercentCell = document.createElement('td');
 	hpPercentCell.setAttribute('class', 'numberCell');
 	hpPercentCell.appendChild(hpPercentText);
-
+	
+	/*
 	var button = document.createElement('input');
 	button.setAttribute('type', 'button');
 	button.setAttribute('value', 'remove');
@@ -378,13 +446,14 @@ function createRow(creature) {
 	var buttonCell = document.createElement('td');
 	buttonCell.setAttribute('class', 'numberCell');
 	buttonCell.appendChild(button);	
+	*/
 
 	var row = document.createElement('tr');
 	row.appendChild(nameCell);
 	row.appendChild(initiativeCell);
 	row.appendChild(hpCell);
 	row.appendChild(hpPercentCell);
-	row.appendChild(buttonCell);
+	//row.appendChild(buttonCell);
 	return row;
 }
 
@@ -477,8 +546,8 @@ function createUi(creatures) {
 		}
 		table.appendChild(testRow);
 	}
-	var addUi = createAddUi();
-	table.appendChild(addUi);
+	//var addUi = createAddUi();
+	//table.appendChild(addUi);
 	return table;	
 }
 

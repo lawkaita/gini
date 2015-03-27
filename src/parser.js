@@ -14,6 +14,7 @@ var areYouSureMsg = {
 };
 var verbs = {
 	"add": addCreatureCommand,
+	"mk": addCreatureCommand,
 	"remove": removeCreatureCommand,
 	"rm": removeCreatureCommand,
 	"init":changeInitiativeCommand,
@@ -239,7 +240,7 @@ function clearEncounterCommand(sure) {
 	database = [];
 	resetCombatClock();
 	updateUi();
-	initiativeIndex = undefined;
+	turnNumber = undefined;
 	return okmsg;
 }
 

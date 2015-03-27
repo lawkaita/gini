@@ -58,6 +58,12 @@ Clock.prototype.resetTime = function() {
 	this.hours = 0;
 }
 
+Clock.prototype.setTime = function(otherClock) {
+	this.seconds = otherClock.seconds;
+	this.minutes = otherClock.minutes;
+	this.hours = otherClock.hours;
+}
+
 /* time.js/other */
 
 function tickerSecondPassed() {
@@ -194,21 +200,36 @@ function timeFormat(unit) {
 	return "" + unit;
 }
 
-var mainClock = new Clock();
-var combatClock = new Clock();
-var ticker = new Clock();
-var turnTracker = new Clock();
+function newWorkingClocks() {
+	combatClock = new Clock();
+	ticker = new Clock();
+	turnTracker = new Clock();
+	setClockOptionsDefault();
+	buildClockHierarchy();
+}
 
-function initClock() {
+function newClocks() {
+	combatClock = new Clock();
+	ticker = new Clock();
+	turnTracker = new Clock();
+}
+
+function setClockOptionsDefault() {
 	ticker.tick = 0;
 	ticker.overTime = true;
+}
+
+function initTurnTracker() {
+	turnTracker.turns = 0;
+	turnTracker.rounds = 0;
+}
+
+function buildClockHierarchy() {
 	ticker.secondPassed = tickerSecondPassed;
 	ticker.setTick = setTick;
 	ticker.zeroTick = zeroTick;
 	ticker.setOverTime = setOverTime;
 	ticker.getOverTimeMsg = getOverTimeMsg;
-	turnTracker.turns = 0;
-	turnTracker.rounds = 0;
 	turnTracker.secondPassed = turnTrackerSecondPassed;
 	turnTracker.turnPassed = turnTrackerTurnPassed;
 	combatClock.takeToInvoke(ticker);
@@ -222,6 +243,8 @@ function resetCombatClock() {
 	combatClock.resetTime();
 	ticker.resetTime();
 	turnTracker.resetTime();
+	turnTracker.turnS = 0;
+	turnTracker.rounds = 0;
 }
 
 var bzz = null;
