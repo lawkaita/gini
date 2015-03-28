@@ -29,9 +29,15 @@ var verbs = {
 	"unremark": unremarkCommand,
 	"untag": unremarkCommand,
 	"next": nextCommand,
+
+	//custom
 	"drive": getHost,
 	"var": varCommand,
 	"dev": devmodeCommand,
+	"dc": dcCommand,
+	"commands": commandsCommand,
+	"mon": monCommand,
+	"mons": monCommand,
 
 	//combatClock
 	"tick": tickCommand,
@@ -135,6 +141,55 @@ function varCommand(params) {
 	return okmsg;
 }
 
+function dcCommand(params) {
+	var dcLetter = params [1];
+	var dcLvl = params [0];
+	
+	var base = 12;
+	if (dcLetter === 'e') {
+		base = 12;
+	}
+	if (dcLetter === 'h') {
+		base = 19;
+	}
+
+	var divideBy = 5.4;
+	if (dcLetter === 'e') {
+		divideBy = 21;
+	}
+	if (dcLetter === 'h') {
+		divideBy = 3.55;
+	}
+
+	var halfLvl = Math.floor(dcLvl/2);
+	var dcMod = Math.floor(dcLvl/divideBy);
+
+	var dc = base + halfLvl + dcMod;
+	return dc;
+}
+
+function commandsCommand(params) {
+	for (var name in verbs) {
+		printText(" - " + name, 'devRow');
+	}
+	return okmsg;
+}
+
+function monCommand(params) {
+	var monName = params [0];
+	if (objectContainsKey(mons, monName)) {
+		printLineBreakText(mons[monName], 'devRow');
+		return okmsg;
+	} else {
+		var msg = {
+			label: fail,
+			text: "not found",
+			rowClass: 'error'
+		}
+		return msg;
+	}
+}
+	
 function addCreatureCommand(params) {
 	var name = params[0];
 	var initiative = params[1];

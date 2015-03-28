@@ -26,6 +26,7 @@ function init() {
 	if (saveWasFound) {
 		loadClock();
 	}
+	startScript();
 	startClock();
 	if (saveWasFound) {
 		var msg = {
